@@ -1,0 +1,151 @@
+****************************************************************
+Any 'read' returns JSON like: { "data": [ {...}, {...}, .....]}
+
+Others return simple JSON { ... }
+****************************************************************
+1. Users: 
+
+	-read GET http://92.87.91.16/backend_code/api/user/read.php
+	
+	-read_single GET http://92.87.91.16/backend_code/api/user/read_single.php?uid=3
+	
+	-create POST http://92.87.91.16/backend_code/api/user/create.php
+			{
+				"mac_user": "00-00-00-00-00-00"
+			}
+	
+	-update PUT http://92.87.91.16/backend_code/api/user/update.php  (update the MAC of a user through uid) 
+				{
+					"uid": "6",
+					"mac_user": "00-00-00-00-00-11"
+				}
+			*If no uid is provided or dose not exist in the table 200 OK is returned but no changes are made
+			**SQL injection is not possible
+			
+	-delete DELETE http://92.87.91.16/backend_code/api/user/delete.php
+				{
+					"uid": "6"
+				}
+			*If no uid is provided or dose not exist in the table 200 OK is returned but no changes are made
+			**SQL injection is not possible
+			
+2. Blue markers: 
+	
+	-read GET http://92.87.91.16/backend_code/api/blue_marker/read.php
+	
+	-read_single GET http://92.87.91.16/backend_code/api/blue_marker/read_single.php?longitude=10.1234567&latitude=10.1234567
+				SOLVED *200 ok, not working!!
+				SOLVED**If the values provided do not reprezent an existing blue marker, returns 200 OK FALSE POSITIVE
+
+	-create POST http://92.87.91.16/backend_code/api/blue_marker/create.php
+	
+				{
+					"longitude": "11.1234",
+					"latitude": "11.1234",
+					"uid_user": "5"
+				}
+			*If the uid_user dose not exist it returns status 500 Internal Server Error (nothing is added).(uid is optional tho).
+			SOLVED **If at error 1062 SQL returns status 500 Internal Server Error (nothing is added)
+			
+			
+	-update PUT  http://92.87.91.16/backend_code/api/blue_marker/update.php
+			** 405 Method not Allowed 
+	
+	-delete DELETE http://92.87.91.16/backend_code/api/blue_marker/delete.php
+			{
+				"longitude": "11.1233997345",
+				"latitude": "11.1233997345"
+			}
+		SOLVED *Returns 200 OK everytime, dose not delete marker from table 
+		##Solved by altering the DB: FLOAT(12,10) to DECIMAL (12,10)
+
+3. Red markers:
+
+	-read GET http://92.87.91.16/backend_code/api/red_marker/read.php
+	
+	-read_single GET http://92.87.91.16/backend_code/api/red_marker/read_single.php?latitude=25.0751705170&longitude=44.8232307434
+			SOLVED*200 ok, not working!!
+			SOLVED** when the marker dose not exist it returnns 200 OK with FALSE POSITIVE
+				
+			
+	-create POST http://92.87.91.16/backend_code/api/red_marker/create.php
+			{
+				"longitude": "35.1234502792",
+				"latitude": "35.1234502792",
+				"uid_volunteer": "1"
+			}
+			*if uid_volunteer dose not exist 500 Internal Server Error (nothing is added)
+			*uid_volunteer is optional 
+			
+	-delete DELETE http://92.87.91.16/backend_code/api/red_marker/delete.php
+			{
+				"longitude": "36.1234502792",
+				"latitude": "36.1234502792"
+			}
+			SOLVED*Returns 200 OK everytime, dose not delete marker from table 
+			##Solved by altering the DB: FLOAT(12,10) to DECIMAL (12,10)
+			
+	-update PUT  http://92.87.91.16/backend_code/api/red_marker/update.php
+	** 405 Method not Allowed
+	
+	
+4. Volunteers: 
+	-read GET http://92.87.91.16/backend_code/api/volunteer/read.php
+	
+	-read_single GET 404 not found (not implemented)
+	
+	-create POST http://92.87.91.16/backend_code/api/volunteer/create.php
+			{
+				"phone": "test-val",
+				"email": "test-val",
+				"password": "test-val",
+				"first_name": "test-val",
+				"last_name": "test-val",
+				"address": "test-val"
+			}
+			*first_name, last_name, address are optional
+	
+	-delete DELETE http://92.87.91.16/backend_code/api/volunteer/delete.php
+			{	
+				"uid": "4"
+			}
+	-update 404 not found (not implemented)
+	
+5. Grey markers
+
+	-read GET http://92.87.91.16/backend_code/api/grey_marker/read.php
+	
+	-read_single GET http://92.87.91.16/backend_code/api/grey_marker/read_single.php?latitude=44.8200492859&longitude=25.0764064789
+	
+	-create POST http://92.87.91.16/backend_code/api/grey_marker/create.php
+			{
+				"longitude": "10.1234",
+				"latitude": "10.1234",
+				"uid_volunteer": "1"
+			}
+			*uid_volunteer is optional
+			
+	-delete DELETE http://92.87.91.16/backend_code/api/grey_marker/delete.php
+			{
+				"longitude": "10.1234",
+				"latitude": "10.1234"
+			}
+			
+	-update 405 Method Not Allowed
+			
+6. Admins
+
+-read GET http://92.87.91.16/backend_code/api/admins/read.php
+
+-login GET http://92.87.91.16/backend_code/api/admins/login.php?name=Alex&password=1234
+returns:
+{
+    "allow": "yes"
+}
+OR
+{
+    "allow": "no"
+}
+
+	
+	
