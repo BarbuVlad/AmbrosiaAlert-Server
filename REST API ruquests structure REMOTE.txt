@@ -2,6 +2,7 @@
 Any 'read' returns JSON like: { "data": [ {...}, {...}, .....]}
 
 Others return simple JSON { ... }
+//comentariu
 ****************************************************************
 1. Users: 
 
