@@ -96,6 +96,24 @@ class User {
     //Error $stmt->error;
     return false;
   }
+  
+  //new function -- UNTESTED
+  //Block a user - bs means blocked by server
+  public function blocked(){
+    //Creaza query - Create query
+    $query = 'UPDATE ' . $this->table_name . ' SET blocked = 'bs' WHERE uid = :uid';
+
+    //Pregateste statement - Prepare statement
+    $stmt = $this->conn->prepare($query);
+
+    //Executa query - Execute query
+    if($stmt->execute()){
+      return true;
+    }
+
+    //Error $stmt->error;
+    return false;
+  }
 
   //Sterge o linie din tabel - Delete row
   public function delete() {

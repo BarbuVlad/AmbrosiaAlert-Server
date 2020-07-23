@@ -1,0 +1,98 @@
+<?php
+	// Send headers with HTTP
+	header('Access-Control-Allow-Origin: *'); // anyone can read
+	header('Content-Type: application/json'); // returns/accepts a json format file
+
+	include_once '../../config/Database.php';
+	include_once '../../objects/User.php';
+	include_once '../../objects/Blue_marker.php';
+	// Instantiate DB & connect //cine face request?? un user minimal, ...
+	$database = new Database();
+	$db = $database->connect();
+
+	// Instantiate a table object of type user
+	$user = new User($db);
+
+	// user query
+	$result = $user->read();
+  
+	// Instantiate a table object of type blue marker
+	$blue_marker = new Blue_marker($db);
+
+	// blue_marker query
+	$result2 = $blue_marker->read();
+  
+	//initiate a collection
+	$time_span = array();
+  
+	//initiate total time of 5min(3000sec) in which a user may put 3 blue markers
+	$total_time = 3000;
+	$total_mark = 1;
+  
+	//while to read each user
+    while($row = $result->fetch(PDO::FETCH_ASSOC)){
+      echo $row['uid'];
+	  //while to read all blue markers for each user
+	  while($row2 = $result2->fetch(PDO::FETCH_ASSOC)){
+		  if($row['uid'] == $row2['uid_user']){
+			    //for each user create an array with times for all his blue markers
+				$blue_marker_item = array(
+					'time' => $time
+				);
+		    }
+	    }
+		foreach ($blu_marker_item as $date){
+			//split date into separate components
+			list($year, $month, $day, $hour, $minute, $second) = split('[/.-]', $date);
+			//add an array of elements to each position of collection
+			$time_span[] = array('year' => $year, 'month' => $month, 'day' => $day, 'hour' => $hour, 'minute' => $minute, 'second' => $second);
+		}
+	}
+	//extend this while until the end
+	
+	
+
+	//taking elements from collection and comparing them 2 by 2
+	for($i=0,$j=count($time_span); $i<$j-1, ++$i){
+		if($time_span[$i]['year'] == $time_span[$i+1]['year']){
+			if($time_span[$i]['month'] == $time_span[$i+1]['month']){
+				if($time_span[$i]['day'] == $time_span[$i+1]['day']){
+					if($time_span[$i]['hour'] == $time_span[$i+1]['hour']){
+						if($time_span[$i]['minute'] == $time_span[$i+1]['minute']){
+							//if 2 blue markers are added in the same minute , compute the difference between seconds and subtract it from total time , also add a second marker to total_mark
+							$sec = intval($time_span[$i]['second']) - intval($time_span[$i+1]['second']);
+							$total_time = $total_time - $sec;
+							$total_mark++;
+						}else{
+							// if minutes are different , do the same as before , but also for minutes
+							$min = intval($time_span[$i]['minute']) - intval($time_span[$i+1]['minute']);
+							$total_time = $total_time - $min*60;
+							$sec = intval($time_span[$i]['second']) - intval($time_span[$i+1]['second']);
+							
+							if($sec >= 0){
+								$total_time = $total_time - $sec;
+							}else{
+								$total_time = $total_time - $sec;
+							}
+							//does it make sense to compare ? if negatine, in same formula will be + as intended
+							$total_mark++;
+						}
+					}
+				}
+			}
+		}
+		//check to see if condition to ban user is true
+		if($total_mark == 3 && $total_time >=0){
+			//block user , metoda noua la user la object
+			require_once('User.php');
+			blocked();
+		}
+		//if run out of time, then reinitialize variables
+		if($total_time < 0){ 
+			$total_time = 3000;
+			$total_mark = 1;
+		}
+	}
+    
+	
+?>
