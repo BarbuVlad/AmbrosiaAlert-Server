@@ -3,9 +3,9 @@
 	header('Access-Control-Allow-Origin: *'); // anyone can read
 	header('Content-Type: application/json'); // returns/accepts a json format file
 
-	include_once '../../config/Database.php';
-	include_once '../../objects/User.php';
-	include_once '../../objects/Blue_marker.php';
+	include_once '../config/Database.php';
+	include_once '../objects/User.php';
+	include_once '../objects/Blue_marker.php';
 	// Instantiate DB & connect //cine face request?? un user minimal, ...
 	$database = new Database();
 	$db = $database->connect();
@@ -15,45 +15,53 @@
 
 	// user query
 	$result = $user->read();
-  
+
 	// Instantiate a table object of type blue marker
 	$blue_marker = new Blue_marker($db);
 
 	// blue_marker query
 	$result2 = $blue_marker->read();
-  
+
 	//initiate a collection
 	$time_span = array();
-  
+
 	//initiate total time of 5min(3000sec) in which a user may put 3 blue markers
+
+	//cand se initializeaza? cand se reseteaza?
 	$total_time = 3000;
 	$total_mark = 1;
-  
+
 	//while to read each user
     while($row = $result->fetch(PDO::FETCH_ASSOC)){
       echo $row['uid'];
+			$user->uid=$row['uid'];
+		//	$total_mark = 1;
+		//	$total_time = 3000;
 	  //while to read all blue markers for each user
 	  while($row2 = $result2->fetch(PDO::FETCH_ASSOC)){
 		  if($row['uid'] == $row2['uid_user']){
 			    //for each user create an array with times for all his blue markers
 				$blue_marker_item = array(
-					'time' => $time
+					'time' => $row2['time']
 				);
 		    }
+				//array_push($blue_marker_arr, $blue_marker_item);
 	    }
-		foreach ($blu_marker_item as $date){
+
+		foreach ($blue_marker_item as $date){
 			//split date into separate components
-			list($year, $month, $day, $hour, $minute, $second) = split('[/.-]', $date);
+			list($year, $month, $day, $hour, $minute, $second) = explode("-", $date);
 			//add an array of elements to each position of collection
 			$time_span[] = array('year' => $year, 'month' => $month, 'day' => $day, 'hour' => $hour, 'minute' => $minute, 'second' => $second);
 		}
-	}
-	//extend this while until the end
-	
-	
 
+	//extend this while until the end
+
+
+//for (int i; i<10, i++)
 	//taking elements from collection and comparing them 2 by 2
-	for($i=0,$j=count($time_span); $i<$j-1, ++$i){
+	$j=count($time_span);
+	for($i=0; $i<$j-1; ++$i){
 		if($time_span[$i]['year'] == $time_span[$i+1]['year']){
 			if($time_span[$i]['month'] == $time_span[$i+1]['month']){
 				if($time_span[$i]['day'] == $time_span[$i+1]['day']){
@@ -68,7 +76,7 @@
 							$min = intval($time_span[$i]['minute']) - intval($time_span[$i+1]['minute']);
 							$total_time = $total_time - $min*60;
 							$sec = intval($time_span[$i]['second']) - intval($time_span[$i+1]['second']);
-							
+
 							if($sec >= 0){
 								$total_time = $total_time - $sec;
 							}else{
@@ -84,15 +92,16 @@
 		//check to see if condition to ban user is true
 		if($total_mark == 3 && $total_time >=0){
 			//block user , metoda noua la user la object
-			require_once('User.php');
-			blocked();
+			//require_once('User.php');
+
+			$user->blocked();
 		}
 		//if run out of time, then reinitialize variables
-		if($total_time < 0){ 
+		if($total_time < 0){
 			$total_time = 3000;
 			$total_mark = 1;
 		}
 	}
-    
-	
+
+}
 ?>
