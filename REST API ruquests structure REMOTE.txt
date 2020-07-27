@@ -134,7 +134,53 @@ Others return simple JSON { ... }
 			
 	-update 405 Method Not Allowed
 			
-6. Admins
+6. Yellow markers
+
+
+	-read GET http://92.87.91.16/backend_code/api/yellow_marker/read.php 
+	
+	-read_single GET http://92.87.91.16/backend_code/api/yellow_marker/read_single.php?latitude=44.8200492859&longitude=25.0764064789 
+	
+	-create POST http://92.87.91.16/backend_code/api/yellow_marker/create.php 
+			{
+				"longitude": "10.1234",
+				"latitude": "10.1234",
+				"uid_volunteer": "1"
+			}
+			*uid_volunteer is optional
+			
+	-delete DELETE http://92.87.91.16/backend_code/api/yellow_marker/delete.php
+			{
+				"longitude": "10.1234",
+				"latitude": "10.1234"
+			}
+			
+
+
+7. New volunteers
+	-read GET http://92.87.91.16/backend_code/api/new_volunteer/read.php
+	
+	-read_single GET 404 not found (not implemented)
+	
+	-create POST http://92.87.91.16/backend_code/api/new_volunteer/create.php
+			{
+				"phone": "test-val",
+				"email": "test-val",
+				"password": "test-val",
+				"first_name": "test-val",
+				"last_name": "test-val",
+				"address": "test-val"
+			}
+			*first_name, last_name, address are optional
+	
+	-delete DELETE http://92.87.91.16/backend_code/api/new_volunteer/delete.php
+			{	
+				"uid": "4"
+			}
+	-update 404 not found (not implemented)
+	
+		
+8. Admins
 
 -read GET http://92.87.91.16/backend_code/api/admins/read.php
 
@@ -148,6 +194,4 @@ OR
     "allow": "no"
 }
 
-//comentariu
-//comentariu2
 	
