@@ -3,9 +3,9 @@
 	header('Access-Control-Allow-Origin: *'); // anyone can read
 	header('Content-Type: application/json'); // returns/accepts a json format file
 
-	include_once '../../config/Database.php';
-	include_once '../../objects/Volunteer.php';
-	include_once '../../objects/Red_marker.php';
+	include_once '../config/Database.php';
+	include_once '../objects/Volunteer.php';
+	include_once '../objects/Red_marker.php';
 	// Instantiate DB & connect //cine face request?? un user minimal, ...
 	$database = new Database();
 	$db = $database->connect();
@@ -25,19 +25,21 @@
 	//initiate a collection
 	$time_span = array();
   
-	//initiate total time of 5min(3000sec) in which a user may put 3 blue markers
-	$total_time = 3000;
-	$total_mark = 1;
-  
 	//while to read each user
     while($row = $result->fetch(PDO::FETCH_ASSOC)){
-      echo $row['uid'];
+		//if a user is blocked , there is no need to check again  TO IMPLEMENT WHEN PROJECT EXTENDED
+		echo $row['uid'];
+		//give a uid to the instance of table object
+		$user->uid=$row['uid'];
+		//initiate total time of 5min(3000sec) in which a user may put 3 blue markers
+		$total_mark = 1;
+		$total_time = 3000;
 	  //while to read all blue markers for each user
 	  while($row2 = $result2->fetch(PDO::FETCH_ASSOC)){
 		  if($row['uid'] == $row2['uid_volunteer']){
 			    //for each user create an array with times for all his blue markers
 				$red_marker_item = array(
-					'time' => $time
+					'time' => $row2['time']
 				);
 		    }
 	    }
@@ -47,13 +49,11 @@
 			//add an array of elements to each position of collection
 			$time_span[] = array('year' => $year, 'month' => $month, 'day' => $day, 'hour' => $hour, 'minute' => $minute, 'second' => $second);
 		}
-	}
-	//extend this while until the end
-	
-	
-
+		
+		
 	//taking elements from collection and comparing them 2 by 2
-	for($i=0,$j=count($time_span); $i<$j-1, ++$i){
+	$j=count($time_span)
+	for($i=0; $i<$j-1; ++$i){
 		if($time_span[$i]['year'] == $time_span[$i+1]['year']){
 			if($time_span[$i]['month'] == $time_span[$i+1]['month']){
 				if($time_span[$i]['day'] == $time_span[$i+1]['day']){
@@ -63,12 +63,13 @@
 							$sec = intval($time_span[$i]['second']) - intval($time_span[$i+1]['second']);
 							$total_time = $total_time - $sec;
 							$total_mark++;
-						}else{
-							// if minutes are different , do the same as before , but also for minutes
+							
+						}if($time_span[$i]['minute'] > $time_span[$i+1]['minute']){
+							// if first minute is bigger , do the same as before , but also for minutes
 							$min = intval($time_span[$i]['minute']) - intval($time_span[$i+1]['minute']);
 							$total_time = $total_time - $min*60;
 							$sec = intval($time_span[$i]['second']) - intval($time_span[$i+1]['second']);
-							
+
 							if($sec >= 0){
 								$total_time = $total_time - $sec;
 							}else{
@@ -76,23 +77,42 @@
 							}
 							//does it make sense to compare ? if negatine, in same formula will be + as intended
 							$total_mark++;
+							
+						}else{
+							// if first minute is smaller , do the same as before , but also for minutes
+							$min = intval($time_span[$i]['minute']) - intval($time_span[$i+1]['minute']);
+							//the formula is with + because the time will be negative
+							$total_time = $total_time + $min*60;
+							$sec = intval($time_span[$i]['second']) - intval($time_span[$i+1]['second']);
+
+							if($sec >= 0){
+								$total_time = $total_time - $sec;
+							}else{
+								$total_time = $total_time - $sec;
+							}
+							//does it make sense to compare ? if negatine, in same formula will be + as intended
+							$total_mark++;
+							
 						}
+						//check to see if condition to ban user is true
+							if($total_mark == 3 && $total_time >=0){
+								//block user , metoda noua la user la object
+								$volunteer->blocked();
+								$total_time = 3000;
+								$total_mark = 1;
+								//maybe we should stop after a user is blocked and go to next one  TO IMPLEMENT WHEN PROJECT EXTENDED
+							}
+							//if run out of time, then reinitialize variables
+							if($total_time < 0){
+								$total_time = 3000;
+								$total_mark = 1;
+							}
 					}
 				}
 			}
 		}
-		//check to see if condition to ban user is true
-		if($total_mark == 3 && $total_time >=0){
-			//block volunteer , metoda noua la volunteer la object
-			require_once('Volunteer.php');
-			blocked();
-		}
-		//if run out of time, then reinitialize variables
-		if($total_time < 0){ 
-			$total_time = 3000;
-			$total_mark = 1;
-		}
+		
 	}
-    
+    }
 	
 ?>

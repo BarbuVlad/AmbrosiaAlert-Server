@@ -97,7 +97,6 @@ class User {
     return false;
   }
 
-  //new function -- UNTESTED
   //Block a user - bs means blocked by server
   public function blocked(){
     //Creaza query - Create query
