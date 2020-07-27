@@ -6,14 +6,14 @@
 	include_once '../config/Database.php';
 	include_once '../objects/Volunteer.php';
 	include_once '../objects/Red_marker.php';
-	// Instantiate DB & connect //cine face request?? un user minimal, ...
+	// Instantiate DB & connect //cine face request?? un volunteer minimal, ...
 	$database = new Database();
 	$db = $database->connect();
 
 	// Instantiate a table object of type volunteer
 	$volunteer = new Volunteer($db);
 
-	// user query
+	// volunteer query
 	$result = $volunteer->read();
 
 	// Instantiate a table object of type red marker
@@ -25,19 +25,20 @@
 	//initiate a collection
 	$time_span = array();
 
-	//while to read each user
+	//while to read each volunteer
     while($row = $result->fetch(PDO::FETCH_ASSOC)){
-		//if a user is blocked , there is no need to check again  TO IMPLEMENT WHEN PROJECT EXTENDED
+		//if a volunteer is blocked , there is no need to check again  TO IMPLEMENT WHEN PROJECT EXTENDED
 		echo $row['uid'];
 		//give a uid to the instance of table object
-		$user->uid=$row['uid'];
-		//initiate total time of 5min(3000sec) in which a user may put 3 blue markers
+		$volunteer->uid=$row['uid'];
+		//initiate total time of 5min(3000sec) in which a volunteer may put 3 blue markers
 		$total_mark = 1;
 		$total_time = 3000;
-	  //while to read all blue markers for each user
+	  //while to read all red markers for each volunteer
+
 	  while($row2 = $result2->fetch(PDO::FETCH_ASSOC)){
 		  if($row['uid'] == $row2['uid_volunteer']){
-			    //for each user create an array with times for all his blue markers
+			    //for each volunteer create an array with times for all his blue markers
 				$red_marker_item = array(
 					'time' => $row2['time']
 				);
@@ -45,7 +46,7 @@
 	    }
 		foreach ($red_marker_item as $date){
 			//split date into separate components
-			list($year, $month, $day, $hour, $minute, $second) = split('[/.-]', $date);
+			list($year, $month, $day, $hour, $minute, $second) = explode('-', $date);
 			//add an array of elements to each position of collection
 			$time_span[] = array('year' => $year, 'month' => $month, 'day' => $day, 'hour' => $hour, 'minute' => $minute, 'second' => $second);
 		}
@@ -94,13 +95,13 @@
 							$total_mark++;
 
 						}
-						//check to see if condition to ban user is true
+						//check to see if condition to ban volunteer is true
 							if($total_mark == 3 && $total_time >=0){
-								//block user , metoda noua la user la object
+								//block volunteer , metoda noua la volunteer la object
 								$volunteer->blocked();
 								$total_time = 3000;
 								$total_mark = 1;
-								//maybe we should stop after a user is blocked and go to next one  TO IMPLEMENT WHEN PROJECT EXTENDED
+								//maybe we should stop after a volunteer is blocked and go to next one  TO IMPLEMENT WHEN PROJECT EXTENDED
 							}
 							//if run out of time, then reinitialize variables
 							if($total_time < 0){
