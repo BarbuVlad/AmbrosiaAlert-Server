@@ -15,16 +15,16 @@
 
 	// user query
 	$result = $volunteer->read();
-  
+
 	// Instantiate a table object of type red marker
 	$red_marker = new Red_marker($db);
 
 	// blue_marker query
 	$result2 = $red_marker->read();
-  
+
 	//initiate a collection
 	$time_span = array();
-  
+
 	//while to read each user
     while($row = $result->fetch(PDO::FETCH_ASSOC)){
 		//if a user is blocked , there is no need to check again  TO IMPLEMENT WHEN PROJECT EXTENDED
@@ -49,10 +49,10 @@
 			//add an array of elements to each position of collection
 			$time_span[] = array('year' => $year, 'month' => $month, 'day' => $day, 'hour' => $hour, 'minute' => $minute, 'second' => $second);
 		}
-		
-		
+
+
 	//taking elements from collection and comparing them 2 by 2
-	$j=count($time_span)
+	$j=count($time_span);
 	for($i=0; $i<$j-1; ++$i){
 		if($time_span[$i]['year'] == $time_span[$i+1]['year']){
 			if($time_span[$i]['month'] == $time_span[$i+1]['month']){
@@ -63,7 +63,7 @@
 							$sec = intval($time_span[$i]['second']) - intval($time_span[$i+1]['second']);
 							$total_time = $total_time - $sec;
 							$total_mark++;
-							
+
 						}if($time_span[$i]['minute'] > $time_span[$i+1]['minute']){
 							// if first minute is bigger , do the same as before , but also for minutes
 							$min = intval($time_span[$i]['minute']) - intval($time_span[$i+1]['minute']);
@@ -77,7 +77,7 @@
 							}
 							//does it make sense to compare ? if negatine, in same formula will be + as intended
 							$total_mark++;
-							
+
 						}else{
 							// if first minute is smaller , do the same as before , but also for minutes
 							$min = intval($time_span[$i]['minute']) - intval($time_span[$i+1]['minute']);
@@ -92,7 +92,7 @@
 							}
 							//does it make sense to compare ? if negatine, in same formula will be + as intended
 							$total_mark++;
-							
+
 						}
 						//check to see if condition to ban user is true
 							if($total_mark == 3 && $total_time >=0){
@@ -111,8 +111,8 @@
 				}
 			}
 		}
-		
+
 	}
     }
-	
+
 ?>

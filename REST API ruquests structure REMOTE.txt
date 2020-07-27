@@ -137,11 +137,11 @@ Others return simple JSON { ... }
 6. Yellow markers
 
 
-	-read GET http://92.87.91.16/backend_code/api/yellow_marker/read.php x
+	-read GET http://92.87.91.16/backend_code/api/yellow_marker/read.php 
 	
-	-read_single GET http://92.87.91.16/backend_code/api/yellow_marker/read_single.php?latitude=44.8200492859&longitude=25.0764064789 x
+	-read_single GET http://92.87.91.16/backend_code/api/yellow_marker/read_single.php?latitude=44.8200492859&longitude=25.0764064789 
 	
-	-create POST http://92.87.91.16/backend_code/api/yellow_marker/create.php x
+	-create POST http://92.87.91.16/backend_code/api/yellow_marker/create.php 
 			{
 				"longitude": "10.1234",
 				"latitude": "10.1234",
