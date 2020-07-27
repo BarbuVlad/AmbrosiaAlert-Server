@@ -111,17 +111,18 @@ class Volunteer {
     return false;
   }
   
-  //new function -- UNTESTED
   //Block a user - bs means blocked by server
   public function blocked(){
     //Creaza query - Create query
-    $query = 'UPDATE ' . $this->table_name . ' SET blocked = 'bs' WHERE uid = :uid';
+    $query = 'UPDATE ' . $this->table_name . ' SET blocked = "bs" WHERE uid = :uid';
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
 
     //Executa query - Execute query
+    $stmt->bindParam(':uid', $this->uid);
     if($stmt->execute()){
+      echo $this->uid . "a fost blocat";
       return true;
     }
 
