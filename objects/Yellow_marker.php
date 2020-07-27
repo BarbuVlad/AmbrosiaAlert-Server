@@ -12,7 +12,7 @@ class Yellow_marker {
  public $longitude;
  public $uid_volunteer;
  public $time;
- 
+
   //Constructor, primeste conexiunea la baza de data
   public function __construct($database){
     $this->conn = $database;
@@ -44,7 +44,6 @@ class Yellow_marker {
     */
 
 
-  }
 
   //Retruneaza o singura linie - Get a single trader_line
   public function read_single() {
