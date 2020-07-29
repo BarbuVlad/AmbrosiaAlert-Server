@@ -19,9 +19,13 @@
 	// Instantiate a table object of type red marker
 	$red_marker = new Red_marker($db);
 
-	// blue_marker query
+	// red_marker query
 	$result2 = $red_marker->read();
-
+	$red_arr = array();
+	while($rows2 = $result2->fetch(PDO::FETCH_ASSOC)){
+		array_push($red_arr,$rows2);
+	}
+	//print_r($red_arr);
 	//initiate a collection
 	$time_span = array();
 
@@ -31,19 +35,27 @@
 		echo $row['uid'];
 		//give a uid to the instance of table object
 		$volunteer->uid=$row['uid'];
-		//initiate total time of 5min(3000sec) in which a volunteer may put 3 blue markers
+		//initiate total time of 5min(3000sec) in which a user may put 3 blue markers
 		$total_mark = 1;
 		$total_time = 3000;
+		$red_marker_item = array();
+		reset($red_marker_item);
+		$time_span = array();
+		reset($time_span);
+
+
+
 	  //while to read all red markers for each volunteer
 
-	  while($row2 = $result2->fetch(PDO::FETCH_ASSOC)){
+	  foreach($red_arr as $row2){
+			//print_r($row2);
+				echo "volunteer_id: ".$row2['uid_volunteer'];
 		  if($row['uid'] == $row2['uid_volunteer']){
 			    //for each volunteer create an array with times for all his blue markers
-				$red_marker_item = array(
-					'time' => $row2['time']
-				);
+				array_push($red_marker_item,$row2['time']);
 		    }
 	    }
+			print_r ($red_marker_item);
 		foreach ($red_marker_item as $date){
 			//split date into separate components
 			list($year, $month, $day, $hour, $minute, $second) = explode('-', $date);

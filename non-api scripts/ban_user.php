@@ -21,7 +21,10 @@
 
 	// blue_marker query
 	$result2 = $blue_marker->read();
-
+	$blue_arr = array();
+  while($rows2 = $result2->fetch(PDO::FETCH_ASSOC)){
+		array_push($blue_arr,$rows2);
+  }
 	//initiate a collection
 	$time_span = array();
 
@@ -34,20 +37,32 @@
 		//initiate total time of 5min(3000sec) in which a user may put 3 blue markers
 		$total_mark = 1;
 		$total_time = 3000;
+		$blue_marker_item = array();
+		reset($blue_marker_item);
+		$time_span = array();
+		reset($time_span);
+
+
 	  //while to read all blue markers for each user
-	  while($row2 = $result2->fetch(PDO::FETCH_ASSOC)){
-		  if($row['uid'] == $row2['uid_user']){
+	  foreach($blue_arr as $row2){
+			echo "user_id: ".$row2['uid_user'];
+		  if($row['uid'] === $row2['uid_user']){
 			    //for each user create an array with times for all his blue markers
-				$blue_marker_item = array(
-					'time' => $row2['time']
-				);
+					//mult de modificat, posibil sa mearga
+				//$blue_marker_item[] = array('time' => $row2['time']);
+				//suprascrie si ramane doar ultima
+				//$blue_marker_item = array($row2['time']);
+				array_push($blue_marker_item,$row2['time']);
+				//print_r ($blue_marker_item);
 		    }
 	    }
+			print_r ($blue_marker_item);
 		foreach ($blue_marker_item as $date){
 			//split date into separate components
 			list($year, $month, $day, $hour, $minute, $second) = explode("-", $date);
 			//add an array of elements to each position of collection
 			$time_span[] = array('year' => $year, 'month' => $month, 'day' => $day, 'hour' => $hour, 'minute' => $minute, 'second' => $second);
+			//print_r ($time_span);
 		}
 
 
@@ -63,7 +78,7 @@
 							$sec = intval($time_span[$i]['second']) - intval($time_span[$i+1]['second']);
 							$total_time = $total_time - $sec;
 							$total_mark++;
-							
+
 						}if($time_span[$i]['minute'] > $time_span[$i+1]['minute']){
 							// if first minute is bigger , do the same as before , but also for minutes
 							$min = intval($time_span[$i]['minute']) - intval($time_span[$i+1]['minute']);
@@ -77,7 +92,7 @@
 							}
 							//does it make sense to compare ? if negatine, in same formula will be + as intended
 							$total_mark++;
-							
+
 						}else{
 							// if first minute is smaller , do the same as before , but also for minutes
 							$min = intval($time_span[$i]['minute']) - intval($time_span[$i+1]['minute']);
@@ -92,7 +107,7 @@
 							}
 							//does it make sense to compare ? if negatine, in same formula will be + as intended
 							$total_mark++;
-							
+
 						}
 						//check to see if condition to ban user is true
 							if($total_mark == 3 && $total_time >=0){
@@ -111,7 +126,7 @@
 				}
 			}
 		}
-		
+
 	}
 	}
 ?>
