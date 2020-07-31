@@ -33,7 +33,9 @@
         'email' => $email,
         'first_name' => $first_name,
         'last_name' => $last_name,
-        'address' => $address
+        'address' => $address,
+        'blocked' => $blocked,
+        'confirmations' => $confirmations
       );
 
       // Push to "data"

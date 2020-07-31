@@ -2,34 +2,48 @@
   // Send headers with HTTP
   header('Access-Control-Allow-Origin: *'); // can be read by anyone
   header('Content-Type: application/json'); // returns a json format file
-  header("Access-Control-Allow-Methods: GET");
+  header("Access-Control-Allow-Methods: POST");
+  header("Access-Control-Max-Age: 3600");
+  header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods, Authorization, X-Requested-With');
+  // json header can be passed for volunteer data
 
   include_once '../../config/Database.php';
   include_once '../../objects/Admin.php';
-  // Instantiate DB & connect //cine face request?? un admin minimal, ...
+  // Instantiate DB & connect //cine face request?? un volunteer minimal, ...
   $database = new Database();
   $db = $database->connect();
 
   // Instantiate a table object
   $admin = new Admin($db);
 
-  // Get uid
-  $admin->name = isset($_GET['name']) ? $_GET['name'] : die(); //if there is a query string in the URL then use it, else die()=stop
-  $admin->password = isset($_GET['password']) ? $_GET['password'] : die();
+  // volunteer query
+	$result = $admin->read_login();
 
-  //read this one admin
-  $admin->read_single();
+  //declare a switch variable 0 initial , 1 if password found
+  $login_ok = 0;
 
-  if($admin->name!=null && $admin->password!=null ){ // if admin exists
-    //Create array and send it as JSON
-    $admin_arr = array(
-      'allow' => 'yes'
-    );
-    http_response_code(200);
-    //send JSON
-    echo json_encode($admin_arr);
-  }
-  else {//if admin dose NOT exist
-    echo json_encode(array('allow'=>"no"));
-  }
+  //get data from request
+  $data = json_decode(file_get_contents("php://input"), true);//data from body of the request
+  //pass data to volunteer
+  $admin->email = $data['email'];
+  $admin->password = $data['password'];
+
+    while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+      if($admin->email == $row['email']){
+        if(password_verify($admin->password, $row['password'])){
+          //if the email and password are found in database than login successfull
+          $login_ok = 1;
+          echo json_encode(array("message" => $row['password']));
+        }
+      }
+    }
+
+    if($login_ok == 1){
+      http_response_code(200);
+      echo json_encode(array("message" => "login successfull"));
+    }
+    else {
+      http_response_code(403);
+      echo json_encode(array("message" => "no such volunteer found"));
+    }
 ?>

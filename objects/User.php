@@ -9,6 +9,7 @@ class User {
  //Atribute relative la tabel
  public $uid;
  public $mac_user;
+ public $blocked;
 
   //Constructor, primeste conexiunea la baza de data
   public function __construct($database){
@@ -20,7 +21,7 @@ class User {
   //Returneaza datele din tabel - Get table data
   public function read() {
     //Creaza query - Create query
-    $query = 'SELECT uid, MAC_user FROM ' . $this->table_name . ' ORDER BY uid ASC;';
+    $query = 'SELECT uid, MAC_user, blocked FROM ' . $this->table_name . ' ORDER BY uid ASC;';
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -34,7 +35,7 @@ class User {
   //Retruneaza o singura linie - Get a single trader_line
   public function read_single() {
     //Creaza query - Create query
-    $query = 'SELECT uid, MAC_user FROM ' . $this->table_name . ' WHERE uid = ? LIMIT 0,1';
+    $query = 'SELECT uid, MAC_user, blocked FROM ' . $this->table_name . ' WHERE uid = ? LIMIT 0,1';
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -50,6 +51,7 @@ class User {
     //seteaza proprietatile(atributele public) - Set proprierties (public attributes)
     $this->uid = $row['uid'];
     $this->mac_user = $row['MAC_user'];
+    $this->blocked = $row['blocked'];
   }
 
   //Creaza o noua intrare in tabel - Create new entry in table
