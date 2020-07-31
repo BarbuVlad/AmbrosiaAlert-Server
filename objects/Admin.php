@@ -55,7 +55,7 @@ class Admin {
   //Creaza o noua intrare in tabel - Create new entry in table
   public function create() {
     //Creaza query - Create query
-    $query = "INSERT INTO " . $this->table_name . " (name, password)" . " VALUES(:name :password)";
+    $query = "INSERT INTO " . $this->table_name . " (name, password)" . " VALUES(:name, :password)";
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -73,6 +73,20 @@ class Admin {
 
     //Error $stmt->error;
     return false;
+  }
+
+  //Retruneaza o lista de name & password
+  public function read_login() {
+    //Creaza query - Create query
+    $query = 'SELECT name, password FROM ' . $this->table_name ;
+
+    //Pregateste statement - Prepare statement
+    $stmt = $this->conn->prepare($query);
+
+    //Executa query - Execute query
+    $stmt->execute();
+
+    return $stmt;
   }
 
 }//delete

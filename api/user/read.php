@@ -29,7 +29,8 @@
       //for this item make a new associative array with all data red
       $user_item = array(
         'uid' => $uid,
-        'mac_user' => $MAC_user
+        'mac_user' => $MAC_user,
+        'blocked' => $blocked
       );
 
       // Push to "data"
@@ -43,6 +44,6 @@
   } else {
     // No Posts
     echo json_encode(
-      array('message' => 'No Admin Found')
+      array('message' => 'No User Found')
     );
   }

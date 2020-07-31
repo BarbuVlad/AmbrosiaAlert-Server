@@ -21,9 +21,9 @@
   //pass data to new_volunteer
   $new_volunteer->phone = $data['phone'];
   $new_volunteer->email = $data['email'];
-  
+
   //hashing the pasword
-  $new_volunteer->password = password_hash($data['password'], PASSWORD_DEFAULT);
+  $new_volunteer->password = password_hash($data['password'], PASSWORD_BCRYPT);
 
   $new_volunteer->first_name = isset($data['first_name']) ? $data['first_name'] : 'null';
   $new_volunteer->last_name = isset($data['last_name']) ? $data['last_name'] : 'null';

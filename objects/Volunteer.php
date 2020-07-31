@@ -14,6 +14,7 @@ class Volunteer {
  public $last_name;
  public $address;
  public $password;// needs hashing, maybe private
+ public $blocked;
 
   //Constructor, primeste conexiunea la baza de data
   public function __construct($database){
@@ -25,7 +26,7 @@ class Volunteer {
   //Returneaza datele din tabel - Get table data
   public function read() {
     //Creaza query - Create query
-    $query = 'SELECT uid, phone, email, first_name, last_name, address FROM ' . $this->table_name . ' ORDER BY uid ASC;';
+    $query = 'SELECT uid, phone, email, first_name, last_name, address, blocked FROM ' . $this->table_name . ' ORDER BY uid ASC;';
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -39,7 +40,7 @@ class Volunteer {
   //Retruneaza o singura linie - Get a single trader_line
   public function read_single() {
     //Creaza query - Create query
-    $query = 'SELECT uid, phone, email, first_name, last_name, address FROM ' . $this->table_name . ' WHERE uid = ? LIMIT 0,1';
+    $query = 'SELECT uid, phone, email, first_name, last_name, address, blocked FROM ' . $this->table_name . ' WHERE uid = ? LIMIT 0,1';
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -59,6 +60,21 @@ class Volunteer {
     $this->first_name = $row['first_name'];
     $this->last_name = $row['last_name'];
     $this->address = $row['address'];
+    $this->blocked = $row['blocked'];
+  }
+
+  //Retruneaza o lista de email & password
+  public function read_login() {
+    //Creaza query - Create query
+    $query = 'SELECT email, password FROM ' . $this->table_name ;
+
+    //Pregateste statement - Prepare statement
+    $stmt = $this->conn->prepare($query);
+
+    //Executa query - Execute query
+    $stmt->execute();
+
+    return $stmt;
   }
 
   //Creaza o noua intrare in tabel - Create new entry in table
@@ -110,7 +126,7 @@ class Volunteer {
     //Error $stmt->error;
     return false;
   }
-  
+
   //Block a user - bs means blocked by server
   public function blocked(){
     //Creaza query - Create query

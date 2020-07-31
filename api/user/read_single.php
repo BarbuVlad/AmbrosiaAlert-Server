@@ -23,7 +23,8 @@
     //Create array and send it as JSON
     $user_arr = array(
       'uid' => $user->uid,
-      'mac_user' => $user->mac_user
+      'mac_user' => $user->mac_user,
+      'blocked' => $user->blocked
     );
     http_response_code(200);
     //send JSON

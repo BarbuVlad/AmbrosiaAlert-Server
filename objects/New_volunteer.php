@@ -14,6 +14,7 @@ class New_volunteer {
  public $last_name;
  public $address;
  public $password;// needs hashing, maybe private
+ public $blocked;
  public $confirmations;
 
   //Constructor, primeste conexiunea la baza de data
@@ -26,7 +27,7 @@ class New_volunteer {
   //Returneaza datele din tabel - Get table data
   public function read() {
     //Creaza query - Create query
-    $query = 'SELECT uid, phone, email, first_name, last_name, address, confirmations FROM ' . $this->table_name . ' ORDER BY uid ASC;';
+    $query = 'SELECT uid, phone, email, first_name, last_name, address, blocked, confirmations FROM ' . $this->table_name . ' ORDER BY uid ASC;';
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -40,7 +41,7 @@ class New_volunteer {
   //Retruneaza o singura linie - Get a single trader_line
   public function read_single() {
     //Creaza query - Create query
-    $query = 'SELECT uid, phone, email, first_name, last_name, address, confirmations FROM ' . $this->table_name . ' WHERE uid = ? LIMIT 0,1';
+    $query = 'SELECT uid, phone, email, first_name, last_name, address, blocked, confirmations FROM ' . $this->table_name . ' WHERE uid = ? LIMIT 0,1';
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -60,7 +61,23 @@ class New_volunteer {
     $this->first_name = $row['first_name'];
     $this->last_name = $row['last_name'];
     $this->address = $row['address'];
-	$this->confirmations = $row['confirmations'];
+    $this->blocked = $row['blocked'];
+    $this->confirmations = $row['confirmations'];
+  }
+
+
+  //Retruneaza o lista de email & password
+  public function read_login() {
+    //Creaza query - Create query
+    $query = 'SELECT email, password FROM ' . $this->table_name ;
+
+    //Pregateste statement - Prepare statement
+    $stmt = $this->conn->prepare($query);
+
+    //Executa query - Execute query
+    $stmt->execute();
+
+    return $stmt;
   }
 
   //Creaza o noua intrare in tabel - Create new entry in table
@@ -112,7 +129,7 @@ class New_volunteer {
     //Error $stmt->error;
     return false;
   }
-  
+
   //Block a user - bs means blocked by server
   public function blocked(){
     //Creaza query - Create query
