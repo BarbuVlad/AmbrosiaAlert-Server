@@ -24,7 +24,7 @@
 
   //get data from request
   $data = json_decode(file_get_contents("php://input"), true);//data from body of the request
-  //pass data to volunteer
+  //pass data to admin
   $admin->email = $data['email'];
   $admin->password = $data['password'];
 
@@ -44,6 +44,6 @@
     }
     else {
       http_response_code(403);
-      echo json_encode(array("message" => "no such volunteer found"));
+      echo json_encode(array("message" => "no such admin found"));
     }
 ?>

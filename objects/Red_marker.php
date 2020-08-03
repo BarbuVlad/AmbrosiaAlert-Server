@@ -23,7 +23,7 @@ class Red_marker {
   //Returneaza datele din tabel - Get table data
   public function read() {
     //Creaza query - Create query
-    $query = 'SELECT latitude, longitude, uid_volunteer, time FROM ' . $this->table_name;
+    $query = 'SELECT latitude, longitude, uid_volunteer, time, confirmations FROM ' . $this->table_name;
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -157,5 +157,28 @@ class Red_marker {
     //Error $stmt->error;
     return false;
   }
+
+  //Methods not intended for
+    public function _increment_confrimations($confirmations, $latitude){
+      $query = 'UPDATE ' . $this->table_name . ' SET confirmations= :confirmations WHERE latitude = :latitude ';
+
+      $stmt = $this->conn->prepare($query);
+
+      $stmt->bindParam(':confirmations', $confirmations);
+      $stmt->bindParam(':latitude', $latitude);
+
+      try{
+        if($stmt->execute()){
+          return true;
+        }
+      }catch(PDOException $e){
+        echo 'ERROR:' . $e;
+      }
+
+
+    }
+
 }
+
+
 ?>
