@@ -6,24 +6,7 @@ include_once '../config/Database.php';
 include_once '../objects/Blue_marker.php';
 include_once '../objects/Red_marker.php';
 
-function distance(
-  $latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371000)
-{
-  // convert from degrees to radians
-  $latFrom = deg2rad($latitudeFrom);
-  $lonFrom = deg2rad($longitudeFrom);
-  $latTo = deg2rad($latitudeTo);
-  $lonTo = deg2rad($longitudeTo);
-
-  $lonDelta = $lonTo - $lonFrom;
-  $a = pow(cos($latTo) * sin($lonDelta), 2) +
-    pow(cos($latFrom) * sin($latTo) - sin($latFrom) * cos($latTo) * cos($lonDelta), 2);
-  $b = sin($latFrom) * sin($latTo) + cos($latFrom) * cos($latTo) * cos($lonDelta);
-
-  $angle = atan2(sqrt($a), $b);
-  return $angle * $earthRadius;
-}
-//vincentyGreatCircleDistance
+include_once '../config/_distance.php';
 
 // Instantiate DB & connect
 $database = new Database();
@@ -47,14 +30,20 @@ $list = array("0"=>array("latitude"=>"10.123400", "longitude"=>"12.002340", "uid
         ........);
 */
 if($num <= 0) {
-  die();
+  exit(1);//exit code for empty list
 }
+echo "List type: " . gettype($list) . "\n";
+print_r($list);
+echo "\n___________________________________________________________________\n\n";
+
 $index = 0; // index of current blue_marker in $list
 foreach($list as $blue_master){
   $counter_found = 0; // number of blue markers close to  $blue_master
   $list_found = array(); //holds data of blue markers close to $blue_master
   //echo print_r($list_found);
   $index = array_search($blue_master,$list);//next index
+
+  if(gettype($index)!='integer'){continue;}
 
   $up_index=$index-1; // search index for up markers
   $down_index=$index+1;// search index for down markers
@@ -63,24 +52,37 @@ foreach($list as $blue_master){
   $down = True;// false = don't search down in the list anymore
 
   $search = True;
-
+  echo "Blue_master, index:" . $index . ". Looking up from index:" . $up_index . "; looking down from index" . $down_index;
+  echo "\n Start search process... \n";
   //look for close blue markers
   while($search){
-
+    echo "\nNew iteration. Down_index:" . $down_index . ", up_index:" . $up_index . "\n----------";
     //Update up and down truth value
     if ($up_index==True){
       if($up_index<0){//out of index
         $up=False;
-      }else if($blue_master["latitude"]-$list[$up_index]["latitude"]>0.0001){//distance greater than 11.12m
+
+        echo " ->out of up_index:" . $up_index . "\n";
+
+      }else if(abs($blue_master["latitude"]-$list[$up_index]["latitude"])>0.0001){//distance greater than 11.12m
         $up=False;
+
+        echo " ->out of DISTANCE for up_index:" . $up_index . "\n";
+
       }
   }
 
     if ($down_index==True){
       if($down_index>=$num){//out of index
         $down=False;
-      }else if($list[$down_index]["latitude"]-$blue_master["latitude"]>0.0001){//distance greater than 11.12m
+
+        echo " ->out of down_index:" . $down_index . "\n";
+
+      }else if(abs($list[$down_index]["latitude"]-$blue_master["latitude"])>0.0001){//distance greater than 11.12m
         $down=False;
+
+        echo " ->out of DISTANCE for down_index:" . $down_index . "\n";
+
       }
   }
 
@@ -93,6 +95,8 @@ foreach($list as $blue_master){
                               "latitude"=>$list[$up_index]["latitude"],
                               "longitude"=>$list[$up_index]["longitude"]));
       $counter_found++;
+
+      echo " --->up_marker found, up_index:" . $up_index . "; counter_found:" . $counter_found;
      }
   }
 
@@ -105,6 +109,8 @@ foreach($list as $blue_master){
                               "latitude"=>$list[$down_index]["latitude"],
                               "longitude"=>$list[$down_index]["longitude"]));
       $counter_found++;
+
+      echo " --->down_marker found, down_index:" . $down_index . "; counter_found:" . $counter_found;
      }
   }
 
@@ -121,7 +127,7 @@ foreach($list as $blue_master){
   while(!(array_key_exists($down_index, $list)) and $down_index<$num){//search for new corect  index
     $down_index++;
   }
-
+echo "------\n";
 //when to stop searching:
 if ($up==False and $down==False){//cannot look up or down
   $search=False;
@@ -131,6 +137,7 @@ if ($up==False and $down==False){//cannot look up or down
 
 }//while
 //Can a red markers be created from this iteration?
+echo "\nIteration for BLUE MASTER ended. Markers found:" . $counter_found . "\n";
 if($counter_found==5){ //best way: transation -> create red marker; if (blue.delete)->FALSE -> rollback!
   //Create red_marker
   // Instantiate a red marker object
@@ -150,6 +157,7 @@ if($counter_found==5){ //best way: transation -> create red marker; if (blue.del
     else{echo "Blue marker NOT deleted \n ";}
 
       //update $list
+    echo "unseting general list...\n";
     unset($list[$b["index"]]);
   }
   //delete $blue_master
@@ -157,7 +165,14 @@ if($counter_found==5){ //best way: transation -> create red marker; if (blue.del
   $blue->longitude = $blue_master["longitude"];
   if($blue->delete()){echo "Blue master marker deleted \n ";}
   else{echo "Blue master marker NOT deleted \n ";}
+  //update $list
+  echo "delete blue MASTER index:" . $index . " from list...\n";
+  unset($list[$index]);
+  echo "Markers calculated. New list: \n";
+  print_r($list);
+
 }
+  echo "\n\nFINISHED index:" . $index . "of type: " . gettype($index) . "\n_____________________________________________________________________\n";
 }//foreach
 
 ?>
