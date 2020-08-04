@@ -127,7 +127,7 @@ class Volunteer {
     return false;
   }
 
-  //Block a user - bs means blocked by server
+  //Block a volunteer - bs means blocked by server
   public function blocked(){
     //Creaza query - Create query
     $query = 'UPDATE ' . $this->table_name . ' SET blocked = "bs" WHERE uid = :uid';

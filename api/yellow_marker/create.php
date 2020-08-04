@@ -12,15 +12,27 @@
 
   include_once '../../config/Database.php';
   include_once '../../objects/Yellow_marker.php';
+  include_once '../../objects/New_volunteer.php';
   // Instantiate DB & connect //cine face request?? un user minimal, ...
   $database = new Database();
   $db = $database->connect();
 
   // Instantiate a table object
   $yellow_marker = new Yellow_marker($db);
+  $new_volunteer = new New_volunteer($db);
+
   //get data from request
   $data = json_decode(file_get_contents("php://input"), true);//data from body of the request
-  //pass data to user
+  //pass data to new_volunteer
+  $new_volunteer->uid = $data['uid_volunteer'];
+  //read this one new_volunteer
+  $new_volunteer->read_single();
+
+  if(strcmp($new_volunteer->blocked, "bs") == 0){
+    //if user is blocked throw error code 403 Forbidden
+    http_response_code(403);
+    echo json_encode(array('message' => 'ERROR occurred. Volunteer no longer has rights'));
+  } else {
   $yellow_marker->latitude = $data['latitude'];
   $yellow_marker->longitude = $data['longitude'];
   $yellow_marker->uid_volunteer = isset($data['uid_volunteer']) ? $data['uid_volunteer'] : null;//if exists
@@ -33,4 +45,5 @@
     http_response_code(503);
     echo json_encode(array('message' => 'ERROR occurred. Yellow marker NOT created'));
   }
+}
 ?>
