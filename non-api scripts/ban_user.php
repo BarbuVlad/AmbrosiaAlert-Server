@@ -1,12 +1,8 @@
 <?php
-	// Send headers with HTTP
-	header('Access-Control-Allow-Origin: *'); // anyone can read
-	header('Content-Type: application/json'); // returns/accepts a json format file
-
 	include_once '../config/Database.php';
 	include_once '../objects/User.php';
 	include_once '../objects/Blue_marker.php';
-	// Instantiate DB & connect //cine face request?? un user minimal, ...
+	// Instantiate DB & connect 
 	$database = new Database();
 	$db = $database->connect();
 

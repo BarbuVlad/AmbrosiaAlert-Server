@@ -1,7 +1,4 @@
 <?php
-	// Send headers with HTTP
-	header('Access-Control-Allow-Origin: *'); // anyone can read
-	header('Content-Type: application/json'); // returns/accepts a json format file
 
 	include_once '../config/Database.php';
 	include_once '../objects/Volunteer.php';

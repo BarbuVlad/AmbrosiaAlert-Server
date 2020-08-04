@@ -9,7 +9,7 @@
 
   include_once '../../config/Database.php';
   include_once '../../objects/New_volunteer.php';
-  // Instantiate DB & connect //cine face request?? un volunteer minimal, ...
+  // Instantiate DB & connect
   $database = new Database();
   $db = $database->connect();
 
@@ -18,9 +18,6 @@
 
   // volunteer query
 	$result = $new_volunteer->read_login();
-
-  //declare a switch variable 0 initial , 1 if password found
-  $login_ok = 0;
 
   //get data from request
   $data = json_decode(file_get_contents("php://input"), true);//data from body of the request
@@ -32,18 +29,12 @@
       if($new_volunteer->email == $row['email']){
         if(password_verify($new_volunteer->password, $row['password'])){
           //if the email and password are found in database than login successfull
-          $login_ok = 1;
-          echo json_encode(array("message" => $row['password']));
+          http_response_code(200);
+          echo json_encode(array("message" => "login successfull"));
+          exit(0);
         }
       }
     }
-
-    if($login_ok == 1){
-      http_response_code(200);
-      echo json_encode(array("message" => "login successfull"));
-    }
-    else {
-      http_response_code(403);
-      echo json_encode(array("message" => "no such volunteer found"));
-    }
+    http_response_code(403);
+    echo json_encode(array("message" => "no such volunteer found"));
 ?>

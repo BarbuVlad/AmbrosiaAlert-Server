@@ -42,7 +42,7 @@ If it is not, then the confirmation factor of that other red marker will increme
     http_response_code(403);
     echo json_encode(array('message' => 'ERROR occurred. Volunteer no longer has rights'));
     exit(0);
-  } 
+  }
 
   //-- Create or increment marker --
   //better: ->read_area
@@ -86,5 +86,5 @@ If it is not, then the confirmation factor of that other red marker will increme
     http_response_code(503);
     echo json_encode(array('message' => 'ERROR occurred. Red marker NOT created'));
   }
-}
+
 ?>
