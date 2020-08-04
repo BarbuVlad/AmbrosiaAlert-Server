@@ -142,6 +142,9 @@ Others return simple JSON { ... }
 	-read GET http://92.87.91.16/backend_code/api/yellow_marker/read.php
 
 	-read_single GET http://92.87.91.16/backend_code/api/yellow_marker/read_single.php?latitude=44.8200492859&longitude=25.0764064789
+	
+	-read_area GET http://92.87.91.16/backend_code/api/yellow_marker/read_area.php?latitude=1.123&longitude=1.123
+		*aprox. 31 sq. km. from given location
 
 	-create POST http://92.87.91.16/backend_code/api/yellow_marker/create.php
 			{
