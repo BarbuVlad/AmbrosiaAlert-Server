@@ -29,8 +29,80 @@ Others return simple JSON { ... }
 				}
 			*If no uid is provided or dose not exist in the table 200 OK is returned but no changes are made
 			**SQL injection is not possible
-			
-2. Blue markers: 
+
+		
+2. Volunteers: 
+	-read GET http://92.87.91.16/backend_code/api/volunteer/read.php
+	
+	-read_single GET 404 not found (not implemented)
+	
+	-create POST http://92.87.91.16/backend_code/api/volunteer/create.php
+			{
+				"phone": "test-val",
+				"email": "test-val",
+				"password": "test-val",
+				"first_name": "test-val",
+				"last_name": "test-val",
+				"address": "test-val"
+			}
+			*first_name, last_name, address are optional
+	
+	-delete DELETE http://92.87.91.16/backend_code/api/volunteer/delete.php
+			{	
+				"uid": "4"
+			}
+	-update 404 not found (not implemented)
+
+
+3. New volunteers
+	-read GET http://92.87.91.16/backend_code/api/new_volunteer/read.php
+	
+	-read_single GET 404 not found (not implemented)
+	
+	-create POST http://92.87.91.16/backend_code/api/new_volunteer/create.php
+			{
+				"phone": "test-val",
+				"email": "test-val",
+				"password": "test-val",
+				"first_name": "test-val",
+				"last_name": "test-val",
+				"address": "test-val"
+			}
+			*first_name, last_name, address are optional
+	
+	-delete DELETE http://92.87.91.16/backend_code/api/new_volunteer/delete.php
+			{	
+				"uid": "4"
+			}
+	-update 404 not found (not implemented)
+
+
+4. Admins
+
+-read GET http://92.87.91.16/backend_code/api/admins/read.php
+
+-create POST http://92.87.91.16/backend_code/api/admins/create.php
+	{
+		"name": "adminX",
+		"password": "123"
+	}
+
+-login POST http://92.87.91.16/backend_code/api/admins/login.php
+	{
+		"name": "adminX",
+		"password": "123"
+	}
+
+RETURN:
+{
+    "message": "$2y$10$dzZSaEGd/i9xF.S0lazBCuvJkDne4g6Z9/f1ouMk.VwdzpdgOp39y"
+}{
+    "message": "login successfull"
+}
+
+
+
+5. Blue markers: 
 	
 	-read GET http://92.87.91.16/backend_code/api/blue_marker/read.php
 	
@@ -59,81 +131,7 @@ Others return simple JSON { ... }
 			}
 		SOLVED *Returns 200 OK everytime, dose not delete marker from table 
 		##Solved by altering the DB: FLOAT(12,10) to DECIMAL (12,10)
-
-3. Red markers:
-
-	-read GET http://92.87.91.16/backend_code/api/red_marker/read.php
-	
-	-read_single GET http://92.87.91.16/backend_code/api/red_marker/read_single.php?latitude=25.0751705170&longitude=44.8232307434
-			SOLVED*200 ok, not working!!
-			SOLVED** when the marker dose not exist it returnns 200 OK with FALSE POSITIVE
-				
-			
-	-create POST http://92.87.91.16/backend_code/api/red_marker/create.php
-			{
-				"longitude": "35.1234502792",
-				"latitude": "35.1234502792",
-				"uid_volunteer": "1"
-			}
-			*if uid_volunteer dose not exist 500 Internal Server Error (nothing is added)
-			*uid_volunteer is optional 
-			
-	-delete DELETE http://92.87.91.16/backend_code/api/red_marker/delete.php
-			{
-				"longitude": "36.1234502792",
-				"latitude": "36.1234502792"
-			}
-			SOLVED*Returns 200 OK everytime, dose not delete marker from table 
-			##Solved by altering the DB: FLOAT(12,10) to DECIMAL (12,10)
-			
-	-update PUT  http://92.87.91.16/backend_code/api/red_marker/update.php
-	** 405 Method not Allowed
-	
-	
-4. Volunteers: 
-	-read GET http://92.87.91.16/backend_code/api/volunteer/read.php
-	
-	-read_single GET 404 not found (not implemented)
-	
-	-create POST http://92.87.91.16/backend_code/api/volunteer/create.php
-			{
-				"phone": "test-val",
-				"email": "test-val",
-				"password": "test-val",
-				"first_name": "test-val",
-				"last_name": "test-val",
-				"address": "test-val"
-			}
-			*first_name, last_name, address are optional
-	
-	-delete DELETE http://92.87.91.16/backend_code/api/volunteer/delete.php
-			{	
-				"uid": "4"
-			}
-	-update 404 not found (not implemented)
-	
-5. Grey markers
-
-	-read GET http://92.87.91.16/backend_code/api/grey_marker/read.php
-	
-	-read_single GET http://92.87.91.16/backend_code/api/grey_marker/read_single.php?latitude=44.8200492859&longitude=25.0764064789
-	
-	-create POST http://92.87.91.16/backend_code/api/grey_marker/create.php
-			{
-				"longitude": "10.1234",
-				"latitude": "10.1234",
-				"uid_volunteer": "1"
-			}
-			*uid_volunteer is optional
-			
-	-delete DELETE http://92.87.91.16/backend_code/api/grey_marker/delete.php
-			{
-				"longitude": "10.1234",
-				"latitude": "10.1234"
-			}
-			
-	-update 405 Method Not Allowed
-			
+		
 6. Yellow markers
 
 
@@ -156,42 +154,63 @@ Others return simple JSON { ... }
 			}
 			
 
+7. Red markers:
 
-7. New volunteers
-	-read GET http://92.87.91.16/backend_code/api/new_volunteer/read.php
+	-read GET http://92.87.91.16/backend_code/api/red_marker/read.php
 	
-	-read_single GET 404 not found (not implemented)
-	
-	-create POST http://92.87.91.16/backend_code/api/new_volunteer/create.php
+	-read_single GET http://92.87.91.16/backend_code/api/red_marker/read_single.php?latitude=25.0751705170&longitude=44.8232307434
+			SOLVED*200 ok, not working!!
+			SOLVED** when the marker dose not exist it returnns 200 OK with FALSE POSITIVE
+				
+			
+	-create POST http://92.87.91.16/backend_code/api/red_marker/create.php
 			{
-				"phone": "test-val",
-				"email": "test-val",
-				"password": "test-val",
-				"first_name": "test-val",
-				"last_name": "test-val",
-				"address": "test-val"
+				"longitude": "35.1234502792",
+				"latitude": "35.1234502792",
+				"uid_volunteer": "1"
 			}
-			*first_name, last_name, address are optional
+			*if this marker is in area of another marker it won't be added, but the no. of confirmations for that other marker will +1
+			*if uid_volunteer dose not exist 500 Internal Server Error (nothing is added)
+			*uid_volunteer is optional 
+			
+	-delete DELETE http://92.87.91.16/backend_code/api/red_marker/delete.php
+			{
+				"longitude": "36.1234502792",
+				"latitude": "36.1234502792"
+			}
+			SOLVED*Returns 200 OK everytime, dose not delete marker from table 
+			##Solved by altering the DB: FLOAT(12,10) to DECIMAL (12,10)
+			
+	-update PUT  http://92.87.91.16/backend_code/api/red_marker/update.php
+	** 405 Method not Allowed
 	
-	-delete DELETE http://92.87.91.16/backend_code/api/new_volunteer/delete.php
-			{	
-				"uid": "4"
+	
+
+8. Grey markers
+
+	-read GET http://92.87.91.16/backend_code/api/grey_marker/read.php
+	
+	-read_single GET http://92.87.91.16/backend_code/api/grey_marker/read_single.php?latitude=44.8200492859&longitude=25.0764064789
+	
+	-create POST http://92.87.91.16/backend_code/api/grey_marker/create.php
+			{
+				"longitude": "10.1234",
+				"latitude": "10.1234",
+				"uid_volunteer": "1"
 			}
-	-update 404 not found (not implemented)
+			*uid_volunteer is optional
+			
+	-delete DELETE http://92.87.91.16/backend_code/api/grey_marker/delete.php
+			{
+				"longitude": "10.1234",
+				"latitude": "10.1234"
+			}
+			
+	-update 405 Method Not Allowed
+
+
 	
 		
-8. Admins
 
--read GET http://92.87.91.16/backend_code/api/admins/read.php
-
--login GET http://92.87.91.16/backend_code/api/admins/login.php?name=Alex&password=1234
-returns:
-{
-    "allow": "yes"
-}
-OR
-{
-    "allow": "no"
-}
 
 	

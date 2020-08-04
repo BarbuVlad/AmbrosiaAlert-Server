@@ -1,6 +1,8 @@
 <?php
 /*
-
+This function attemts to create a new red marker.
+Condtion: this new marker must be within 100 meters from any other red marker.
+If it is not, then the confirmation factor of that other red marker will increment by 1.
 */
   // Send headers with HTTP
   header('Access-Control-Allow-Origin: *'); // can be read by anyone
@@ -12,8 +14,11 @@
 
   include_once '../../config/Database.php';
   include_once '../../objects/Red_marker.php';
+
   include_once '../../objects/Volunteer.php';
-  // Instantiate DB & connect //cine face request?? un user minimal, ...
+  include_once '../../config/_distance.php';
+  // Instantiate DB & connect
+
   $database = new Database();
   $db = $database->connect();
 
@@ -23,6 +28,7 @@
 
   //get data from request
   $data = json_decode(file_get_contents("php://input"), true);//data from body of the request
+
   //pass data to volunteer
 
   $voulteer->uid = $data['uid_volunteer'];
@@ -35,7 +41,39 @@
     //if user is blocked throw error code 403 Forbidden
     http_response_code(403);
     echo json_encode(array('message' => 'ERROR occurred. Volunteer no longer has rights'));
-  } else {
+    exit(0);
+  } 
+
+  //-- Create or increment marker --
+  //better: ->read_area
+  //optimisation in DB: partitions and indexes
+  $markers = $red_marker->read()->fetchAll();
+  //for every marker check the distance
+  foreach($markers as $marker){
+    /*
+    if(abs($data['latitude']-$marker['latitude']) > 0.001){// 0.001 represents a distance of 0.11 km ~ 110m
+      continue;
+    }
+    */
+    //if the markers intersect, then do not create red marker
+    //ideal: increment for the closest red_marker
+    if(distance($data['latitude'], $data['longitude'], $marker['latitude'], $marker['longitude']) < 200){//< marker['radius']+100
+      try{
+        //increment the confirmations of that marker
+          $red_marker->_increment_confrimations($marker['confirmations']+1,$marker['latitude']);
+          http_response_code(200);
+          echo json_encode(array('message' => 'red marker NOT created. In area of another marker'));
+          exit();//incrementation succesful, skip
+      }catch(Exception $e){
+          echo "ERROR create: " . $e;
+          http_response_code(400);
+        }
+    }
+  }
+
+
+  //pass data to red marker
+
   $red_marker->latitude = $data['latitude'];
   $red_marker->longitude = $data['longitude'];
   $red_marker->uid_volunteer = $data['uid_volunteer'];//if exists
