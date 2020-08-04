@@ -19,31 +19,22 @@
   // volunteer query
 	$result = $admin->read_login();
 
-  //declare a switch variable 0 initial , 1 if password found
-  $login_ok = 0;
-
   //get data from request
   $data = json_decode(file_get_contents("php://input"), true);//data from body of the request
   //pass data to admin
-  $admin->email = $data['email'];
+  $admin->name = $data['name'];
   $admin->password = $data['password'];
 
     while($row = $result->fetch(PDO::FETCH_ASSOC)) {
-      if($admin->email == $row['email']){
+      if($admin->name == $row['name']){
         if(password_verify($admin->password, $row['password'])){
           //if the email and password are found in database than login successfull
-          $login_ok = 1;
-          echo json_encode(array("message" => $row['password']));
+          http_response_code(200);
+          echo json_encode(array("message" => "login successfull"));
+          exit(0);
         }
       }
     }
-
-    if($login_ok == 1){
-      http_response_code(200);
-      echo json_encode(array("message" => "login successfull"));
-    }
-    else {
       http_response_code(403);
       echo json_encode(array("message" => "no such admin found"));
-    }
 ?>

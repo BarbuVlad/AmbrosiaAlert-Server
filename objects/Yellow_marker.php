@@ -71,6 +71,32 @@ class Yellow_marker {
     $this->time = $row['time'];
   }
 
+  public function read_area() {
+    /*
+    takes a set of coordinates and returns all red markers in that  area
+    ! For now this is hard-coded and not optimized; it takes roughly an area of 30 sq km
+    - The problem of converting coordinates to distance can be problematic, planet Earth is an imperfect sphere
+    https://www.usgs.gov/faqs/how-much-distance-does-a-degree-minute-and-second-cover-your-maps?qt-news_science_products=0#qt-news_science_products
+    A good optimisation must be made when it comes to non-cluster indexes in DB
+    Tests must be performed to determin if this approach is better. (in the end this will compare all markers against some values )
+    */
+    //This 0.2 difference represents roughly 31.11 km
+    $query = 'SELECT latitude, longitude, uid_volunteer, time FROM ' . $this->table_name .
+    ' WHERE (latitude BETWEEN :latitude_down  AND :latitude_up ) AND '.
+    '(longitude BETWEEN :longitude_down AND :longitude_up)';
+    //Pregateste statement - Prepare statement
+    $stmt = $this->conn->prepare($query);
+    //Bind
+    $stmt->bindParam(":latitude_down", floatval($this->latitude-0.2));
+    $stmt->bindParam(":latitude_up", floatval($this->latitude+0.2));
+    $stmt->bindParam(":longitude_down", floatval($this->longitude-0.2));
+    $stmt->bindParam(":longitude_up", floatval($this->longitude+0.2));
+
+    $stmt->execute();
+
+    return $stmt;
+  }
+
   //Creaza o noua intrare in tabel - Create new entry in table
   public function create() {
     //Creaza query - Create query

@@ -4,25 +4,25 @@ Any 'read' returns JSON like: { "data": [ {...}, {...}, .....]}
 Others return simple JSON { ... }
 
 ****************************************************************
-1. Users: 
+1. Users:
 
 	-read GET http://92.87.91.16/backend_code/api/user/read.php
-	
+
 	-read_single GET http://92.87.91.16/backend_code/api/user/read_single.php?uid=3
-	
+
 	-create POST http://92.87.91.16/backend_code/api/user/create.php
 			{
 				"mac_user": "00-00-00-00-00-00"
 			}
-	
-	-update PUT http://92.87.91.16/backend_code/api/user/update.php  (update the MAC of a user through uid) 
+
+	-update PUT http://92.87.91.16/backend_code/api/user/update.php  (update the MAC of a user through uid)
 				{
 					"uid": "6",
 					"mac_user": "00-00-00-00-00-11"
 				}
 			*If no uid is provided or dose not exist in the table 200 OK is returned but no changes are made
 			**SQL injection is not possible
-			
+
 	-delete DELETE http://92.87.91.16/backend_code/api/user/delete.php
 				{
 					"uid": "6"
@@ -30,12 +30,12 @@ Others return simple JSON { ... }
 			*If no uid is provided or dose not exist in the table 200 OK is returned but no changes are made
 			**SQL injection is not possible
 
-		
-2. Volunteers: 
+
+2. Volunteers:
 	-read GET http://92.87.91.16/backend_code/api/volunteer/read.php
-	
+
 	-read_single GET 404 not found (not implemented)
-	
+
 	-create POST http://92.87.91.16/backend_code/api/volunteer/create.php
 			{
 				"phone": "test-val",
@@ -46,19 +46,25 @@ Others return simple JSON { ... }
 				"address": "test-val"
 			}
 			*first_name, last_name, address are optional
-	
+
 	-delete DELETE http://92.87.91.16/backend_code/api/volunteer/delete.php
-			{	
+			{
 				"uid": "4"
 			}
 	-update 404 not found (not implemented)
 
+	-login POST http://92.87.91.16/backend_code/api/new_volunteer/login.php
+
+			{
+				"email": "test-val",
+				"password": "test-val"
+			}
 
 3. New volunteers
 	-read GET http://92.87.91.16/backend_code/api/new_volunteer/read.php
-	
+
 	-read_single GET 404 not found (not implemented)
-	
+
 	-create POST http://92.87.91.16/backend_code/api/new_volunteer/create.php
 			{
 				"phone": "test-val",
@@ -69,13 +75,19 @@ Others return simple JSON { ... }
 				"address": "test-val"
 			}
 			*first_name, last_name, address are optional
-	
+
 	-delete DELETE http://92.87.91.16/backend_code/api/new_volunteer/delete.php
-			{	
+			{
 				"uid": "4"
 			}
 	-update 404 not found (not implemented)
 
+	-login POST http://92.87.91.16/backend_code/api/new_volunteer/login.php
+
+			{
+				"email": "test-val",
+				"password": "test-val"
+			}
 
 4. Admins
 
@@ -93,25 +105,17 @@ Others return simple JSON { ... }
 		"password": "123"
 	}
 
-RETURN:
-{
-    "message": "$2y$10$dzZSaEGd/i9xF.S0lazBCuvJkDne4g6Z9/f1ouMk.VwdzpdgOp39y"
-}{
-    "message": "login successfull"
-}
 
+5. Blue markers:
 
-
-5. Blue markers: 
-	
 	-read GET http://92.87.91.16/backend_code/api/blue_marker/read.php
-	
+
 	-read_single GET http://92.87.91.16/backend_code/api/blue_marker/read_single.php?longitude=10.1234567&latitude=10.1234567
 				SOLVED *200 ok, not working!!
 				SOLVED**If the values provided do not reprezent an existing blue marker, returns 200 OK FALSE POSITIVE
 
 	-create POST http://92.87.91.16/backend_code/api/blue_marker/create.php
-	
+
 				{
 					"longitude": "11.1234",
 					"latitude": "11.1234",
@@ -119,50 +123,52 @@ RETURN:
 				}
 			*If the uid_user dose not exist it returns status 500 Internal Server Error (nothing is added).(uid is optional tho).
 			SOLVED **If at error 1062 SQL returns status 500 Internal Server Error (nothing is added)
-			
-			
+
+
 	-update PUT  http://92.87.91.16/backend_code/api/blue_marker/update.php
-			** 405 Method not Allowed 
-	
+			** 405 Method not Allowed
+
 	-delete DELETE http://92.87.91.16/backend_code/api/blue_marker/delete.php
 			{
 				"longitude": "11.1233997345",
 				"latitude": "11.1233997345"
 			}
-		SOLVED *Returns 200 OK everytime, dose not delete marker from table 
+		SOLVED *Returns 200 OK everytime, dose not delete marker from table
 		##Solved by altering the DB: FLOAT(12,10) to DECIMAL (12,10)
-		
+
 6. Yellow markers
 
 
-	-read GET http://92.87.91.16/backend_code/api/yellow_marker/read.php 
-	
-	-read_single GET http://92.87.91.16/backend_code/api/yellow_marker/read_single.php?latitude=44.8200492859&longitude=25.0764064789 
-	
-	-create POST http://92.87.91.16/backend_code/api/yellow_marker/create.php 
+	-read GET http://92.87.91.16/backend_code/api/yellow_marker/read.php
+
+	-read_single GET http://92.87.91.16/backend_code/api/yellow_marker/read_single.php?latitude=44.8200492859&longitude=25.0764064789
+
+	-create POST http://92.87.91.16/backend_code/api/yellow_marker/create.php
 			{
 				"longitude": "10.1234",
 				"latitude": "10.1234",
 				"uid_volunteer": "1"
 			}
 			*uid_volunteer is optional
-			
+
 	-delete DELETE http://92.87.91.16/backend_code/api/yellow_marker/delete.php
 			{
 				"longitude": "10.1234",
 				"latitude": "10.1234"
 			}
-			
+
 
 7. Red markers:
 
 	-read GET http://92.87.91.16/backend_code/api/red_marker/read.php
-	
+
 	-read_single GET http://92.87.91.16/backend_code/api/red_marker/read_single.php?latitude=25.0751705170&longitude=44.8232307434
 			SOLVED*200 ok, not working!!
 			SOLVED** when the marker dose not exist it returnns 200 OK with FALSE POSITIVE
-				
-			
+
+	-read_area GET http://92.87.91.16/backend_code/api/red_marker/read_area.php?latitude=1.123&longitude=1.123
+			*aprox. 31 sq. km. from given location
+
 	-create POST http://92.87.91.16/backend_code/api/red_marker/create.php
 			{
 				"longitude": "35.1234502792",
@@ -171,27 +177,27 @@ RETURN:
 			}
 			*if this marker is in area of another marker it won't be added, but the no. of confirmations for that other marker will +1
 			*if uid_volunteer dose not exist 500 Internal Server Error (nothing is added)
-			*uid_volunteer is optional 
-			
+			*uid_volunteer is optional
+
 	-delete DELETE http://92.87.91.16/backend_code/api/red_marker/delete.php
 			{
 				"longitude": "36.1234502792",
 				"latitude": "36.1234502792"
 			}
-			SOLVED*Returns 200 OK everytime, dose not delete marker from table 
+			SOLVED*Returns 200 OK everytime, dose not delete marker from table
 			##Solved by altering the DB: FLOAT(12,10) to DECIMAL (12,10)
-			
+
 	-update PUT  http://92.87.91.16/backend_code/api/red_marker/update.php
 	** 405 Method not Allowed
-	
-	
+
+
 
 8. Grey markers
 
 	-read GET http://92.87.91.16/backend_code/api/grey_marker/read.php
-	
+
 	-read_single GET http://92.87.91.16/backend_code/api/grey_marker/read_single.php?latitude=44.8200492859&longitude=25.0764064789
-	
+
 	-create POST http://92.87.91.16/backend_code/api/grey_marker/create.php
 			{
 				"longitude": "10.1234",
@@ -199,18 +205,11 @@ RETURN:
 				"uid_volunteer": "1"
 			}
 			*uid_volunteer is optional
-			
+
 	-delete DELETE http://92.87.91.16/backend_code/api/grey_marker/delete.php
 			{
 				"longitude": "10.1234",
 				"latitude": "10.1234"
 			}
-			
+
 	-update 405 Method Not Allowed
-
-
-	
-		
-
-
-	

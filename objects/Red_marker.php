@@ -43,8 +43,21 @@ class Red_marker {
     A good optimisation must be made when it comes to non-cluster indexes in DB
     Tests must be performed to determin if this approach is better. (in the end this will compare all markers against some values )
     */
+    //This 0.2 difference represents roughly 31.11 km
+    $query = 'SELECT latitude, longitude, uid_volunteer, time, confirmations FROM ' . $this->table_name .
+    ' WHERE (latitude BETWEEN :latitude_down  AND :latitude_up ) AND '.
+    '(longitude BETWEEN :longitude_down AND :longitude_up)';
+    //Pregateste statement - Prepare statement
+    $stmt = $this->conn->prepare($query);
+    //Bind
+    $stmt->bindParam(":latitude_down", floatval($this->latitude-0.2));
+    $stmt->bindParam(":latitude_up", floatval($this->latitude+0.2));
+    $stmt->bindParam(":longitude_down", floatval($this->longitude-0.2));
+    $stmt->bindParam(":longitude_up", floatval($this->longitude+0.2));
 
+    $stmt->execute();
 
+    return $stmt;
   }
 
   //Retruneaza o singura linie - Get a single trader_line
