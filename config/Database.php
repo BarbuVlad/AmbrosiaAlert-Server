@@ -3,7 +3,7 @@ class Database {
 
   //Parametrii database (atribute ale clasei)
   private $host = 'localhost';
-  private $db_name = 'ambrosia';//move back to ambrosia when done
+  private $db_name = 'ambrosia2';//move back to ambrosia when done
   private $username = 'pcuser1';
   private $password = 'Admin1234!';
   private $conn;
