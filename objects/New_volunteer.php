@@ -110,7 +110,7 @@ class New_volunteer {
   //Update o linie din tabel - Update a line form table
   public function update(){
     //Creaza query - Create query
-    $query = 'UPDATE ' . $this->table_name . ' SET MAC_user = :mac WHERE uid = :uid';
+    $query = 'UPDATE ' . $this->table_name . ' SET confirmations = :confirmations WHERE uid = :uid';
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -119,7 +119,7 @@ class New_volunteer {
 
     //Bind data
     $stmt->bindParam(':uid', $this->uid);
-    $stmt->bindParam(':mac', $this->mac_user);
+    $stmt->bindParam(':confirmations', $this->confirmations);//modified
 
     //Executa query - Execute query
     if($stmt->execute()){
