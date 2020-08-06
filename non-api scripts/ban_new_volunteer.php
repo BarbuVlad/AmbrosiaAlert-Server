@@ -42,7 +42,6 @@
 
 
 	  //while to read all yellow markers for each new_volunteer
-
 	  foreach($yellow_arr as $row2){
 			//print_r($row2);
 				echo "new_volunteer_id: ".$row2['uid_volunteer'];
