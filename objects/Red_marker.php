@@ -12,6 +12,8 @@ class Red_marker {
  public $longitude;
  public $uid_volunteer;
  public $time;
+ //public $confirmations;
+ //public $radius;
 
   //Constructor, primeste conexiunea la baza de data
   public function __construct($database){
@@ -23,7 +25,7 @@ class Red_marker {
   //Returneaza datele din tabel - Get table data
   public function read() {
     //Creaza query - Create query
-    $query = 'SELECT latitude, longitude, uid_volunteer, time, confirmations FROM ' . $this->table_name;
+    $query = 'SELECT latitude, longitude, uid_volunteer, time, confirmations, radius FROM ' . $this->table_name;
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -44,7 +46,7 @@ class Red_marker {
     Tests must be performed to determin if this approach is better. (in the end this will compare all markers against some values )
     */
     //This 0.2 difference represents roughly 31.11 km
-    $query = 'SELECT latitude, longitude, uid_volunteer, time, confirmations FROM ' . $this->table_name .
+    $query = 'SELECT latitude, longitude, uid_volunteer, time, confirmations, radius FROM ' . $this->table_name .
     ' WHERE (latitude BETWEEN :latitude_down  AND :latitude_up ) AND '.
     '(longitude BETWEEN :longitude_down AND :longitude_up)';
     //Pregateste statement - Prepare statement
@@ -171,7 +173,7 @@ class Red_marker {
     return false;
   }
 
-  //Methods not intended for
+  //Methods not intended for API requests
     public function _increment_confrimations($confirmations, $latitude){
       $query = 'UPDATE ' . $this->table_name . ' SET confirmations= :confirmations WHERE latitude = :latitude ';
 
@@ -188,7 +190,25 @@ class Red_marker {
         echo 'ERROR:' . $e;
       }
 
+    }
 
+    public function _read_intersecting_markers($latitude, $one_meter=0.000015){ // 0.000010 = 1.11meters
+
+      $query = 'SELECT latitude, longitude, confirmations, radius FROM ' . $this->table_name .
+      ' WHERE latitude BETWEEN :latitude_down  AND :latitude_up ';
+
+      $stmt = $this->conn->prepare($query);
+
+      //get intersecting value
+      $intersecting_value = is_numeric(strval($latitude)[7]) ? strval($latitude)[7]*$one_meter : 0.0;
+      //exemple: for latitude=10.1234567; $intersecting_value will be 5*0.00001 = 55 meters
+      //Bind
+      $stmt->bindParam(":latitude_down", floatval($latitude - $intersecting_value));
+      $stmt->bindParam(":latitude_up", floatval($latitude + $intersecting_value));
+
+      $stmt->execute();
+
+      return $stmt;
     }
 
 }

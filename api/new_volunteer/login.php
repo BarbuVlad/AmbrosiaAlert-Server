@@ -30,7 +30,7 @@
         if(password_verify($new_volunteer->password, $row['password'])){
           //if the email and password are found in database than login successfull
           http_response_code(200);
-          echo json_encode(array("message" => "login successfull"));
+          echo json_encode(array("message" => "new_volunteer_login_successfull"));
           exit(0);
         }
       }

@@ -53,7 +53,7 @@ Others return simple JSON { ... }
 			}
 	-update 404 not found (not implemented)
 
-	-login POST http://92.87.91.16/backend_code/api/new_volunteer/login.php
+	-login POST http://92.87.91.16/backend_code/api/volunteer/login.php
 
 			{
 				"email": "test-val",
@@ -142,7 +142,7 @@ Others return simple JSON { ... }
 	-read GET http://92.87.91.16/backend_code/api/yellow_marker/read.php
 
 	-read_single GET http://92.87.91.16/backend_code/api/yellow_marker/read_single.php?latitude=44.8200492859&longitude=25.0764064789
-	
+
 	-read_area GET http://92.87.91.16/backend_code/api/yellow_marker/read_area.php?latitude=1.123&longitude=1.123
 		*aprox. 31 sq. km. from given location
 
@@ -153,6 +153,17 @@ Others return simple JSON { ... }
 				"uid_volunteer": "1"
 			}
 			*uid_volunteer is optional
+
+	-confirm POST http://92.87.91.16/backend_code/api/yellow_marker/confirm.php
+		{
+			"longitude": "10.1234",
+			"latitude": "10.1234",
+			"uid_volunteer": "12",
+			"uid_volunteer_confirm": "13"
+		}
+*uid_volunteer -> uid new_volunteer ce a pus acel marker yellow
+*uid_volunteer_confirm -> uid volunteer ce a confirmat acel marker yellow
+**Daca volunteer e blocat acesta poate in continuare sa confirme markere yellow!
 
 	-delete DELETE http://92.87.91.16/backend_code/api/yellow_marker/delete.php
 			{

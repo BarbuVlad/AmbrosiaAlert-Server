@@ -47,23 +47,18 @@ If it is not, then the confirmation factor of that other red marker will increme
   //-- Create or increment marker --
   //better: ->read_area
   //optimisation in DB: partitions and indexes
-  $markers = $red_marker->read()->fetchAll();
+  $markers = $red_marker->_read_intersecting_markers($data['latitude'])->fetchAll();
   //for every marker check the distance
   foreach($markers as $marker){
-    /*
-    if(abs($data['latitude']-$marker['latitude']) > 0.001){// 0.001 represents a distance of 0.11 km ~ 110m
-      continue;
-    }
-    */
     //if the markers intersect, then do not create red marker
     //ideal: increment for the closest red_marker
-    if(distance($data['latitude'], $data['longitude'], $marker['latitude'], $marker['longitude']) < 200){//< marker['radius']+100
+    if(distance($data['latitude'], $data['longitude'], $marker['latitude'], $marker['longitude']) < $marker['radius']+40){//intersect more than 10 meters
       try{
         //increment the confirmations of that marker
           $red_marker->_increment_confrimations($marker['confirmations']+1,$marker['latitude']);
           http_response_code(200);
           echo json_encode(array('message' => 'red marker NOT created. In area of another marker'));
-          exit();//incrementation succesful, skip
+          exit(0);//incrementation succesful, skip
       }catch(Exception $e){
           echo "ERROR create: " . $e;
           http_response_code(400);
