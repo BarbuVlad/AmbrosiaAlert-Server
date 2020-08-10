@@ -41,7 +41,8 @@
         'latitude' => $latitude,
         'longitude' => $longitude,
         'uid_volunteer' => $uid_volunteer,
-        'time' => $time
+        'time' => $time,
+        'radius' => $radius
       );
 
       // Push to "data"
@@ -49,7 +50,7 @@
     }
     // Turn to JSON & output
     echo json_encode($red_marker_arr);
-    
+
   } else {
     // No Blue Markers
     echo json_encode(

@@ -47,10 +47,10 @@ $new_volunteer->confirmations = $conf;
 //read this one volunteer
 $volunteer->read_single();
 
-if(strcmp($new_volunteer->blocked, "bs") == 0){
+if(strcmp($new_volunteer->blocked, "bs") == 0 || strcmp($volunteer->blocked, "bs") == 0){
   //if user is blocked throw error code 403 Forbidden
   http_response_code(403);
-  echo json_encode(array('message' => 'ERROR occurred. Volunteer no longer has rights'));
+  echo json_encode(array('message' => 'ERROR_occurred. Volunteer no longer has rights'));
   exit(0);
 } else {
   try{

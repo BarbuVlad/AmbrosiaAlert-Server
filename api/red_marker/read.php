@@ -32,7 +32,8 @@
         'latitude' => $latitude,
         'longitude' => $longitude,
         'uid_volunteer' => $uid_volunteer,
-        'time' => $time
+        'time' => $time,
+        'radius' => $radius
       );
 
       // Push to "data"
