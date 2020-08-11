@@ -31,7 +31,7 @@ If it is not, then the confirmation factor of that other red marker will increme
 
   //pass data to volunteer
 
-  $voulteer->uid = $data['uid_volunteer'];
+  $voluteer->uid = $data['uid_volunteer'];
 
   //read this one volunteer
   $volunteer->read_single();
