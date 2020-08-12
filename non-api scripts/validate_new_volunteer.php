@@ -7,6 +7,13 @@ include_once '../config/Database.php';
 include_once '../objects/New_volunteer.php';
 include_once '../objects/Volunteer.php';
 include_once '../objects/Yellow_marker.php';
+
+include_once '../config/_writeFile.php';
+
+//Instantiate a name and a string to be written in the text file
+$name = "validate_new_volunteer_test";
+$str = "\n___________________________________________________________________\n\n This test will run after using the corresponding scenario.";
+
 // Instantiate DB & connect //cine face request?? un new_volunteer minimal, ...
 $database = new Database();
 $db = $database->connect();
@@ -28,6 +35,7 @@ while($rows3 = $result3->fetch(PDO::FETCH_ASSOC)){
 
 while($row = $result->fetch(PDO::FETCH_ASSOC)){
   //echo json_encode(array('message' => $row ));
+  $str = $str."\n___________________________________________________________________\n\n New volunteer id: ".$row['uid']."\n Confirmations: ".$row['confirmations']."\n";
   if(intval($row['confirmations']) >= 2){
     //if a new volunteer has 2 confirmations, then make it a valid volunteer
 
@@ -71,16 +79,19 @@ while($row = $result->fetch(PDO::FETCH_ASSOC)){
   $b = $new_volunteer->delete();
 
   $db->commit();
+  $str = $str."New volunteer has been validated !"
   }catch(PDOException $e){
     http_response_code(503);
     //echo json_encode(array('message' => 'ERROR occurred. Action cancelled !'));
     echo json_encode(array('message' => $e));
     $db->rollBack();
+    $str = $str."New volunteer has NOT been validated ! \n Here is why: ".$e."\n";
     exit(0);
   }
   }
 }
 http_response_code(200);
 echo json_encode(array('message' => 'Action performed!'));
-
+$str = $str."\n___________________________________________________________________\n\n END OF TEST \n___________________________________________________________________\n\n";
+writeFile($name,$str);
 ?>

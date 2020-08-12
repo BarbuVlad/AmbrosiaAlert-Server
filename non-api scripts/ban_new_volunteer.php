@@ -2,6 +2,13 @@
 	include_once '../config/Database.php';
 	include_once '../objects/New_volunteer.php';
 	include_once '../objects/Yellow_marker.php';
+
+	include_once '../config/_writeFile.php';
+
+	//Instantiate a name and a string to be written in the text file
+	$name = "ban_new_volunteer_test";
+	$str = "\n___________________________________________________________________\n\n This test will run after using the corresponding scenario.";
+
 	// Instantiate DB & connect //cine face request?? un new_volunteer minimal, ...
 	$database = new Database();
 	$db = $database->connect();
@@ -39,8 +46,7 @@
 		$time_span = array();
 		reset($time_span);
 
-
-
+		$str = $str."\n___________________________________________________________________\n\n New Volunteer id: ".$row['uid']."\n Markers: \n";
 	  //while to read all yellow markers for each new_volunteer
 	  foreach($yellow_arr as $row2){
 			//print_r($row2);
@@ -48,6 +54,7 @@
 		  if($row['uid'] == $row2['uid_volunteer']){
 			    //for each new_volunteer create an array with times for all his blue markers
 				array_push($yellow_marker_item,$row2['time']);
+				$str = $str.$row2['time']."\n";
 		    }
 	    }
 			print_r ($yellow_marker_item);
@@ -108,6 +115,7 @@
 								$new_volunteer->blocked();
 								$total_time = 3000;
 								$total_mark = 1;
+								$str = $str."\n User has been blocked";
 								//maybe we should stop after a new_volunteer is blocked and go to next one  TO IMPLEMENT WHEN PROJECT EXTENDED
 							}
 							//if run out of time, then reinitialize variables
@@ -122,5 +130,7 @@
 
 	}
     }
+		$str = $str."\n___________________________________________________________________\n\n END OF TEST \n___________________________________________________________________\n\n";
+		writeFile($name,$str);
 
 ?>
