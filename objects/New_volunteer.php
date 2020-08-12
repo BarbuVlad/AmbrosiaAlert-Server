@@ -69,7 +69,7 @@ class New_volunteer {
   //Retruneaza o lista de email & password
   public function read_login() {
     //Creaza query - Create query
-    $query = 'SELECT email, password FROM ' . $this->table_name ;
+    $query = 'SELECT email, password, uid FROM ' . $this->table_name ;
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
