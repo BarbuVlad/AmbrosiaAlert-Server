@@ -2,7 +2,14 @@
 	include_once '../config/Database.php';
 	include_once '../objects/User.php';
 	include_once '../objects/Blue_marker.php';
-	// Instantiate DB & connect 
+
+	include_once '../config/_writeFile.php';
+
+	//Instantiate a name and a string to be written in the text file
+	$name = "ban_user_test";
+	$str = "\n___________________________________________________________________\n\n This test will run after using the corresponding scenario.";
+
+	// Instantiate DB & connect
 	$database = new Database();
 	$db = $database->connect();
 
@@ -38,7 +45,7 @@
 		$time_span = array();
 		reset($time_span);
 
-
+		$str = $str."\n___________________________________________________________________\n\n User id: ".$row['uid']."\n Markers: \n";
 	  //while to read all blue markers for each user
 	  foreach($blue_arr as $row2){
 			echo "user_id: ".$row2['uid_user'];
@@ -49,6 +56,7 @@
 				//suprascrie si ramane doar ultima
 				//$blue_marker_item = array($row2['time']);
 				array_push($blue_marker_item,$row2['time']);
+				$str = $str.$row2['time']."\n";
 				//print_r ($blue_marker_item);
 		    }
 	    }
@@ -111,6 +119,7 @@
 								$user->blocked();
 								$total_time = 3000;
 								$total_mark = 1;
+								$str = $str."\n User has been blocked";
 								//maybe we should stop after a user is blocked and go to next one  TO IMPLEMENT WHEN PROJECT EXTENDED
 							}
 							//if run out of time, then reinitialize variables
@@ -125,4 +134,6 @@
 
 	}
 	}
+	$str = $str."\n___________________________________________________________________\n\n END OF TEST \n___________________________________________________________________\n\n";
+	writeFile($name,$str);
 ?>

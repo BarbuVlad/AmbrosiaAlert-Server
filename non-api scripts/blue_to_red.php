@@ -1,5 +1,6 @@
 <?php
 echo "blue_to_red SCRIPT RUN";
+$str = $str."blue_to_red SCRIPT RUN";
 //This script holds a complexity in Big(O) of n*log(n)
 //Fetch data from DB
 include_once '../config/Database.php';
@@ -7,6 +8,7 @@ include_once '../objects/Blue_marker.php';
 include_once '../objects/Red_marker.php';
 
 include_once '../config/_distance.php';
+include_once '../config/_writeFile.php';
 
 // Instantiate DB & connect
 $database = new Database();
@@ -35,6 +37,7 @@ if($num <= 0) {
 echo "List type: " . gettype($list) . "\n";
 print_r($list);
 echo "\n___________________________________________________________________\n\n";
+$str = $str."\n___________________________________________________________________\n\n";
 
 $index = 0; // index of current blue_marker in $list
 foreach($list as $blue_master){
@@ -53,21 +56,26 @@ foreach($list as $blue_master){
 
   $search = True;
   echo "Blue_master, index:" . $index . ". Looking up from index:" . $up_index . "; looking down from index" . $down_index;
+  $str = $str."Blue_master, index:" . $index . ". Looking up from index:" . $up_index . "; looking down from index" . $down_index;
   echo "\n Start search process... \n";
+  $str = $str."\n Start search process... \n";
   //look for close blue markers
   while($search){
     echo "\nNew iteration. Down_index:" . $down_index . ", up_index:" . $up_index . "\n----------";
+    $str = $str."\nNew iteration. Down_index:" . $down_index . ", up_index:" . $up_index . "\n----------";
     //Update up and down truth value
     if ($up_index==True){
       if($up_index<0){//out of index
         $up=False;
 
         echo " ->out of up_index:" . $up_index . "\n";
+        $str = $str." ->out of up_index:" . $up_index . "\n";
 
       }else if(abs($blue_master["latitude"]-$list[$up_index]["latitude"])>0.0001){//distance greater than 11.12m
         $up=False;
 
         echo " ->out of DISTANCE for up_index:" . $up_index . "\n";
+        $str = $str." ->out of DISTANCE for up_index:" . $up_index . "\n";
 
       }
   }
@@ -77,11 +85,13 @@ foreach($list as $blue_master){
         $down=False;
 
         echo " ->out of down_index:" . $down_index . "\n";
+        $str = $str." ->out of down_index:" . $down_index . "\n";
 
       }else if(abs($list[$down_index]["latitude"]-$blue_master["latitude"])>0.0001){//distance greater than 11.12m
         $down=False;
 
         echo " ->out of DISTANCE for down_index:" . $down_index . "\n";
+        $str = $str." ->out of DISTANCE for down_index:" . $down_index . "\n";
 
       }
   }
@@ -97,6 +107,7 @@ foreach($list as $blue_master){
       $counter_found++;
 
       echo " --->up_marker found, up_index:" . $up_index . "; counter_found:" . $counter_found;
+      $str = $str." --->up_marker found, up_index:" . $up_index . "; counter_found:" . $counter_found;
      }
   }
 
@@ -111,6 +122,7 @@ foreach($list as $blue_master){
       $counter_found++;
 
       echo " --->down_marker found, down_index:" . $down_index . "; counter_found:" . $counter_found;
+      $str = $str." --->down_marker found, down_index:" . $down_index . "; counter_found:" . $counter_found;
      }
   }
 
@@ -128,6 +140,7 @@ foreach($list as $blue_master){
     $down_index++;
   }
 echo "------\n";
+$str = $str."------\n";
 //when to stop searching:
 if ($up==False and $down==False){//cannot look up or down
   $search=False;
@@ -138,6 +151,7 @@ if ($up==False and $down==False){//cannot look up or down
 }//while
 //Can a red markers be created from this iteration?
 echo "\nIteration for BLUE MASTER ended. Markers found:" . $counter_found . "\n";
+$str = $str."\nIteration for BLUE MASTER ended. Markers found:" . $counter_found . "\n";
 if($counter_found==5){ //best way: transation -> create red marker; if (blue.delete)->FALSE -> rollback!
   //Create red_marker
   // Instantiate a red marker object
@@ -146,33 +160,44 @@ if($counter_found==5){ //best way: transation -> create red marker; if (blue.del
   $red->longitude = $blue_master["longitude"];
   $red->time = date('Y-m-d-H-i-s');
 
-  if($red->create()){echo "Red marker created from blue markers \n ";}
-  else {echo "Red marker NOT created from blue markers. ERROR \n ";}
+  if($red->create()){echo "Red marker created from blue markers \n ";
+  $str = $str."Red marker created from blue markers \n "}
+  else {echo "Red marker NOT created from blue markers. ERROR \n ";
+  $str = $str."Red marker NOT created from blue markers. ERROR \n ";}
 
   foreach($list_found as $b){//for every blue marker found
     //delete blue Markers
     $blue->latitude = $b["latitude"];
     $blue->longitude = $b["longitude"];
-    if($blue->delete()){echo "Blue marker deleted \n ";}
-    else{echo "Blue marker NOT deleted \n ";}
+    if($blue->delete()){echo "Blue marker deleted \n ";
+    $str = $str."Blue marker deleted \n "}
+    else{echo "Blue marker NOT deleted \n ";
+    $str = $str."Blue marker NOT deleted \n ";}
 
       //update $list
     echo "unseting general list...\n";
+    $str = $str."unseting general list...\n";
     unset($list[$b["index"]]);
   }
   //delete $blue_master
   $blue->latitude = $blue_master["latitude"];
   $blue->longitude = $blue_master["longitude"];
-  if($blue->delete()){echo "Blue master marker deleted \n ";}
-  else{echo "Blue master marker NOT deleted \n ";}
+  if($blue->delete()){echo "Blue master marker deleted \n ";
+  $str = $str."Blue master marker deleted \n ";}
+  else{echo "Blue master marker NOT deleted \n ";
+  $str = $str."Blue master marker NOT deleted \n "}
   //update $list
   echo "delete blue MASTER index:" . $index . " from list...\n";
+  $str = $str."delete blue MASTER index:" . $index . " from list...\n";
   unset($list[$index]);
   echo "Markers calculated. New list: \n";
+  $str = $str."Markers calculated. New list: \n";
   print_r($list);
 
 }
   echo "\n\nFINISHED index:" . $index . "of type: " . gettype($index) . "\n_____________________________________________________________________\n";
+  $str = $str."\n\nFINISHED index:" . $index . "of type: " . gettype($index) . "\n_____________________________________________________________________\n";
 }//foreach
-
+$str = $str."\n___________________________________________________________________\n\n END OF TEST \n___________________________________________________________________\n\n";
+writeFile($name,$str);
 ?>
