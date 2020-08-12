@@ -29,7 +29,8 @@
       if($volunteer->email == $row['email']){
         if(password_verify($volunteer->password, $row['password'])){
           http_response_code(200);
-          echo json_encode(array("message" => "volunteer_login_successfull"));
+          echo json_encode(array("message" => "volunteer_login_successfull",
+                                  "uid" => $row['uid']));
           exit(0);
         }
       }
