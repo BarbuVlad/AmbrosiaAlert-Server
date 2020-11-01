@@ -161,7 +161,7 @@ if($counter_found==5){ //best way: transation -> create red marker; if (blue.del
   $red->time = date('Y-m-d-H-i-s');
 
   if($red->create()){echo "Red marker created from blue markers \n ";
-  $str = $str."Red marker created from blue markers \n "}
+  $str = $str."Red marker created from blue markers \n ";}
   else {echo "Red marker NOT created from blue markers. ERROR \n ";
   $str = $str."Red marker NOT created from blue markers. ERROR \n ";}
 
@@ -170,7 +170,9 @@ if($counter_found==5){ //best way: transation -> create red marker; if (blue.del
     $blue->latitude = $b["latitude"];
     $blue->longitude = $b["longitude"];
     if($blue->delete()){echo "Blue marker deleted \n ";
-    $str = $str."Blue marker deleted \n "}
+
+    $str = $str."Blue marker deleted \n ";}
+
     else{echo "Blue marker NOT deleted \n ";
     $str = $str."Blue marker NOT deleted \n ";}
 
@@ -185,7 +187,8 @@ if($counter_found==5){ //best way: transation -> create red marker; if (blue.del
   if($blue->delete()){echo "Blue master marker deleted \n ";
   $str = $str."Blue master marker deleted \n ";}
   else{echo "Blue master marker NOT deleted \n ";
-  $str = $str."Blue master marker NOT deleted \n "}
+  $str = $str."Blue master marker NOT deleted \n ";
+}
   //update $list
   echo "delete blue MASTER index:" . $index . " from list...\n";
   $str = $str."delete blue MASTER index:" . $index . " from list...\n";

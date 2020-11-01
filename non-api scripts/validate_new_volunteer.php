@@ -79,7 +79,7 @@ while($row = $result->fetch(PDO::FETCH_ASSOC)){
   $b = $new_volunteer->delete();
 
   $db->commit();
-  $str = $str."New volunteer has been validated !"
+  $str = $str."New volunteer has been validated !";
   }catch(PDOException $e){
     http_response_code(503);
     //echo json_encode(array('message' => 'ERROR occurred. Action cancelled !'));
