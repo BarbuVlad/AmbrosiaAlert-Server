@@ -48,29 +48,29 @@ $new_volunteer->confirmations = $conf;
 $volunteer->read_single();
 
 if(strcmp($new_volunteer->blocked, "bs") == 0 || strcmp($volunteer->blocked, "bs") == 0){
-  //if user is blocked throw error code 403 Forbidden
-  http_response_code(403);
-  echo json_encode(array('message' => 'ERROR_occurred. Volunteer no longer has rights'));
-  exit(0);
+    //if user is blocked throw error code 403 Forbidden
+    http_response_code(403);
+    echo json_encode(array('message' => 'ERROR_occurred. Volunteer no longer has rights'));
+    exit(0);
 } else {
-  try{
-$db->beginTransaction();
-//update with increased number
-$a = $new_volunteer->update();
+    try{
+      $db->beginTransaction();
+      //update with increased number
+      $a = $new_volunteer->update();
 
-//create red marker
-$b = $red_marker->create();
+      //create red marker
+      $b = $red_marker->create();
 
-//delete yellow marker
-$c = $yellow_marker->delete();
+      //delete yellow marker
+      $c = $yellow_marker->delete();
 
-$db->commit();
-}catch(PDOException $e){
-  http_response_code(503);
-  echo json_encode(array('message' => 'ERROR occurred. Action cancelled !'));
-  $db->rollBack();
-  exit(0);
-}
+      $db->commit();
+  }catch(PDOException $e){
+    http_response_code(503);
+    echo json_encode(array('message' => 'ERROR occurred. Action cancelled !'));
+    $db->rollBack();
+    exit(0);
+  }
 }
 http_response_code(200);
 echo json_encode(array('message' => 'Action performed!'));
