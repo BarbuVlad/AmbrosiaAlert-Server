@@ -86,7 +86,7 @@ while($row = $result->fetch(PDO::FETCH_ASSOC)){
     echo json_encode(array('message' => $e));
     $db->rollBack();
     $str = $str."New volunteer has NOT been validated ! \n Here is why: ".$e."\n";
-    exit(0);
+    exit(1);
   }
   }
 }
