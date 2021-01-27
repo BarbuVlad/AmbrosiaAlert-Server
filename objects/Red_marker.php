@@ -90,7 +90,25 @@ class Red_marker {
 
   //Creaza o noua intrare in tabel - Create new entry in table
   public function create() {
-    //Creaza query - Create query
+    //-- Create or increment marker --
+    include_once '../../config/_distance.php';
+    $markers = $this->_read_intersecting_markers($this->latitude)->fetchAll();
+    //for every marker check the distance
+    foreach($markers as $marker){
+      //if the markers intersect, then do not create red marker
+      //ideal: increment for the closest red_marker
+      if(distance($this->latitude, $this->longitude, $marker['latitude'], $marker['longitude']) < $marker['radius']+40){//intersect more than 10 meters
+        try{
+          //increment the confirmations of that marker
+            $this->_increment_confrimations($marker['confirmations']+1,$marker['latitude']);
+            return 0;
+        } catch(Exception $e){
+            return 1;
+        }
+      }
+    }
+    //No intersection => create new marker
+    // Create query
     $query = "INSERT INTO " . $this->table_name . " (latitude, longitude, uid_volunteer, time)" . " VALUES(:latitude, :longitude, :uid_volunteer, :time)";
 
     //Pregateste statement - Prepare statement
@@ -107,23 +125,12 @@ class Red_marker {
     //Executa query - Execute query
     try{
       if($stmt->execute()){
-        return true;
+        return 2;
       }
     } catch (PDOException $e) {
-      if($stmt->errorInfo()[1] == '1062'){ // Special case (rare)
-      //1062 MySQL -> Duplicate entry for key primary (Composite PK: longitude, latitude)
-      //Randomize the value
-      $random_change = round(rand(10, 99) * 0.0000001, 6); // 0.000 00X -> 1.5m-0.1m
-      $this->longitude = $this->longitude + $random_change;
-      $this->latitude = $this->latitude + $random_change;
-      //try again
-      if($stmt->execute()){
-        return true;}
-    }
+      return 3;
   }
-
     //Error $stmt->error;
-    return false;
   }
 
   //Update o linie din tabel - Update a line form table

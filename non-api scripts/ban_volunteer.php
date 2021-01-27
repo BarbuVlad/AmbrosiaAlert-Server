@@ -39,9 +39,9 @@
 		echo $row['uid'];
 		//give a uid to the instance of table object
 		$volunteer->uid=$row['uid'];
-		//initiate total time of 5min(3000sec) in which a user may put 3 blue markers
+		//initiate total time of 5min(3000sec) in which a user may put 3 blue markers? 300 = 5 min
 		$total_mark = 1;
-		$total_time = 3000;
+		$total_time = 300;
 		$red_marker_item = array();
 		reset($red_marker_item);
 		$time_span = array();
