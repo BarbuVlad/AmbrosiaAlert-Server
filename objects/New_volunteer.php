@@ -65,11 +65,9 @@ class New_volunteer {
     $this->confirmations = $row['confirmations'];
   }
 
-
-  //Retruneaza o lista de email & password
-  public function read_login() {
+  public function _read_all_data() {
     //Creaza query - Create query
-    $query = 'SELECT email, password, uid FROM ' . $this->table_name ;
+    $query = 'SELECT uid, phone, email, first_name, last_name, address, blocked, confirmations, password FROM ' . $this->table_name . ' ORDER BY uid ASC;';
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
