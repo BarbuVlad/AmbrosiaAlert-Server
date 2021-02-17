@@ -65,11 +65,9 @@ class New_volunteer {
     $this->confirmations = $row['confirmations'];
   }
 
-
-  //Retruneaza o lista de email & password
-  public function read_login() {
+  public function _read_all_data() {
     //Creaza query - Create query
-    $query = 'SELECT email, password, uid FROM ' . $this->table_name ;
+    $query = 'SELECT uid, phone, email, first_name, last_name, address, blocked, confirmations, password FROM ' . $this->table_name . ' ORDER BY uid ASC;';
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -82,10 +80,10 @@ class New_volunteer {
 
   //Creaza o noua intrare in tabel - Create new entry in table
   public function create() {
-    //Creaza query - Create query
+    //Create query
     $query = "INSERT INTO " . $this->table_name . "(phone, email, first_name, last_name, address, password)" . " VALUES(:phone, :email, :first_name, :last_name, :address, :password)";
 
-    //Pregateste statement - Prepare statement
+    //Prepare statement
     $stmt = $this->conn->prepare($query);
 
     //Clean data (done in create.php)
@@ -98,13 +96,21 @@ class New_volunteer {
     $stmt->bindParam(':address', $this->address);
     $stmt->bindParam(':password', $this->password);
 
-    //Executa query - Execute query
-    if($stmt->execute()){
-      return true;
-    }
 
-    //Error $stmt->error;
-    return false;
+    //Create - but check for email dupicate Unique Key
+    try{
+        //Execute query
+        if($stmt->execute()){
+          return 1;
+        }
+      } catch (PDOException $e) {
+          //Error $stmt->error;
+          if($stmt->errorInfo()[1] == '1062'){
+            return 2;
+          }
+        }
+        return false;
+
   }
 
   //Update o linie din tabel - Update a line form table

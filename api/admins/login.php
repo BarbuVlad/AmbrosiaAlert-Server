@@ -26,8 +26,13 @@
   $admin->password = $data['password'];
 
     while($row = $result->fetch(PDO::FETCH_ASSOC)) {
-      if($admin->name == $row['name']){
-        if(password_verify($admin->password, $row['password'])){
+      /*
+      $x=password_verify($data['password'], $row['password']);
+      echo json_encode(array("message" => "login successfull" . $data['name'] . " " . $data['password'] . " -- " . $row['name'] . " " . $row['password'] . "--->" . $x . gettype($x) ));
+      exit(0);
+*/
+      if($data['name'] == $row['name']){
+        if(password_verify($data['password'], $row['password'])){
           //if the email and password are found in database than login successfull
           http_response_code(200);
           echo json_encode(array("message" => "login successfull"));
