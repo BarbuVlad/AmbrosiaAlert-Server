@@ -4,7 +4,7 @@ class Database {
   //Parametrii database (atribute ale clasei)
   private $host = 'localhost';
 
-  private $db_name = 'ambrosia3';//2 is the test
+  private $db_name = 'ambrosia';//2 is the test
   private $username = 'pcuser1';
 
   private $password = 'Admin1234!';
