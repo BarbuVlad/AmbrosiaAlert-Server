@@ -1,6 +1,6 @@
 #./python_tests
-./.gitignore
-./sql
-./python_tests/.vs/*
-./python_tests/__pycache__/*
-
+/.gitignore
+/sql
+/python_tests/.vs/*
+/python_tests/__pycache__/*
+/api/admins/l.php

@@ -95,14 +95,23 @@ class Volunteer {
     $stmt->bindParam(':address', $this->address);
     $stmt->bindParam(':password', $this->password);
 
-    //Executa query - Execute query
-    if($stmt->execute()){
-      return true;
-    }
 
-    //Error $stmt->error;
+    //Create - but check for email dupicate Unique Key
+    try{
+      //Execute query
+      if($stmt->execute()){
+        return 1;
+      }
+    } catch (PDOException $e) {
+        //Error $stmt->error;
+        if($stmt->errorInfo()[1] == '1062'){
+          return 2;
+        }
+      }
+
     return false;
   }
+  
 
   //Update o linie din tabel - Update a line form table
   public function update(){
