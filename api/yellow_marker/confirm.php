@@ -28,14 +28,14 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 $yellow_marker->latitude = $data['latitude'];
 $yellow_marker->longitude = $data['longitude'];
-$new_volunteer->uid = $data['uid_volunteer'];
-$volunteer->uid = $data['uid_volunteer_confirm'];
+$new_volunteer->email = $data['email_volunteer'];
+$volunteer->email = $data['email_volunteer_confirm'];
 
 //create a red marker with data from yellow marker
 $red_marker->latitude = $data['latitude'];
 $red_marker->longitude = $data['longitude'];
 $red_marker->time = date('Y-m-d-H-i-s');
-$red_marker->uid_volunteer = $data['uid_volunteer_confirm'];
+$red_marker->email_volunteer = $data['email_volunteer_confirm'];
 
 // volunteer query
 $new_volunteer->read_single();

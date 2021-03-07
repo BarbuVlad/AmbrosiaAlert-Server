@@ -16,26 +16,29 @@
   // Instantiate a table object
   $volunteer = new Volunteer($db);
 
-  // volunteer query
-	$result = $volunteer->read_login();
-
   //get data from request
   $data = json_decode(file_get_contents("php://input"), true);//data from body of the request
   //pass data to volunteer
   $volunteer->email = $data['email'];
   $volunteer->password = $data['password'];
 
-    while($row = $result->fetch(PDO::FETCH_ASSOC)) {
-      if($volunteer->email == $row['email']){
-        if(password_verify($volunteer->password, $row['password'])){
-          http_response_code(200);
-          echo json_encode(array("message" => "volunteer_login_successfull",
-                                  "uid" => $row['uid']));
-          exit(0);
-        }
-      }
-    }
+  // volunteer query
+	$result = $volunteer->read_login();
+  if($result === 1){
+    http_response_code(400);
+    echo json_encode(array("message" => "invalid_email_format"));
+    exit(1);
+  }
+
+  if(password_verify($volunteer->password, $result['password'])){
+    http_response_code(200);
+    echo json_encode(array("message" => "volunteer_login_successfull",
+                            "email" => $result['email']));
+    exit(0);
+  }
+  
+    
     http_response_code(403);
-    echo json_encode(array("message" => "no such volunteer found"));
+    echo json_encode(array("message" => "no_such_volunteer_found"));
 
 ?>

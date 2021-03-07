@@ -31,7 +31,7 @@
         //'uid' => $uid,
         'latitude' => $latitude,
         'longitude' => $longitude,
-        'uid_volunteer' => $uid_volunteer,
+        'email_volunteer' => $email_volunteer,
         'time' => $time
       );
 
@@ -41,10 +41,12 @@
     }
 
     // Turn to JSON & output
+    http_response_code(200);
     echo json_encode($yellow_marker_arr);
 
   } else {
-    // No Blue Markers
+    // No YELLOW Markers
+    http_response_code(404);
     echo json_encode(
       array('message' => 'No Yellow Markers Found')
     );

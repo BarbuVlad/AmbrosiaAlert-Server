@@ -28,9 +28,8 @@
 
       //for this item make a new associative array with all data red
       $volunteer_item = array(
-        'uid' => $uid,
-        'phone' => $phone,
         'email' => $email,
+        'phone' => $phone,
         'first_name' => $first_name,
         'last_name' => $last_name,
         'address' => $address,

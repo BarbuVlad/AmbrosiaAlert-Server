@@ -7,32 +7,131 @@ Others return simple JSON { ... }
 1. Users:
 
 	-read GET http://92.87.91.16/backend_code/api/user/read.php
-
+		Response 1:
+			200OK 
+				{
+				"data": [
+					{
+						"uid": "1",
+						"mac_user": "00:0u:95:2e:88:99",
+						"blocked": "bs"
+					},
+					{
+						"uid": "2",
+						"mac_user": "00:0o:95:1s:98:33",
+						"blocked": null
+					},.............................................
+		-------------------------------------------------------------------
+				Response 2:
+			500Server Error 
+		-------------------------------------------------------------------
+<<
+>>
 	-read_single GET http://92.87.91.16/backend_code/api/user/read_single.php?uid=3
-
+			Response 1:
+			200OK 
+				{
+					"uid": "3",
+					"mac_user": "00:0a:95:3a:45:47",
+					"blocked": "bs"
+				}.............................................
+		-------------------------------------------------------------------
+			Response 2:
+			200OK 
+				{
+    				"message": "User dose NOT exist"
+				}
+		-------------------------------------------------------------------
+			Response 3:
+			500Server Error 
+		-------------------------------------------------------------------
+<<
+>>
 	-create POST http://92.87.91.16/backend_code/api/user/create.php
 			{
 				"mac_user": "00-00-00-00-00-00"
 			}
-
+			______________
+			Response 1:
+			200OK 
+				{
+					"message": "User created"
+				}
+		-------------------------------------------------------------------
+			Response 2:
+			500Server Error 
+		-------------------------------------------------------------------
+		*To be refactored (send more complete codes)
+		**To refactor mac_user to vendor ID
+<<
+>>
 	-update PUT http://92.87.91.16/backend_code/api/user/update.php  (update the MAC of a user through uid)
 				{
 					"uid": "6",
 					"mac_user": "00-00-00-00-00-11"
 				}
+				______________
+				Response 1:
+				200OK 
+					{
+						"message": "User updated"
+					}
+			-------------------------------------------------------------------
+				Response 2:
+				500Server Error 
+			-------------------------------------------------------------------
+
 			*If no uid is provided or dose not exist in the table 200 OK is returned but no changes are made
-			**SQL injection is not possible
+			**To be refactored (send more complete codes)
+<<
+>>
 
 	-delete DELETE http://92.87.91.16/backend_code/api/user/delete.php
 				{
 					"uid": "6"
 				}
+				______________
+				Response 1:
+				200OK 
+					{
+						"message": "User deleted"
+					}
+			-------------------------------------------------------------------
+				Response 2:
+				500Server Error 
+			-------------------------------------------------------------------
 			*If no uid is provided or dose not exist in the table 200 OK is returned but no changes are made
-			**SQL injection is not possible
+			**To be refactored (send more complete codes)
 
+>>
+<<
 
 2. Volunteers:
 	-read GET http://92.87.91.16/backend_code/api/volunteer/read.php
+		Response 1:
+		200OK 
+			{
+			"data": [
+				{
+					"uid": "137",
+					"phone": "test-val",
+					"email": "test-val",
+					"first_name": "test-val",
+					"last_name": "test-val",
+					"address": "test-val",
+					"blocked": null
+				},
+				{
+					"uid": "139",
+					"phone": "test-val",
+					................................
+	-------------------------------------------------------------------
+		Response 2:
+		500Server Error 
+	-------------------------------------------------------------------
+	
+>>
+<<
 
 	-read_single GET 404 not found (not implemented)
 

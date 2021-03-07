@@ -10,7 +10,7 @@ class Yellow_marker {
  //public $uid;
  public $latitude;
  public $longitude;
- public $uid_volunteer;
+ public $email_volunteer;
  public $time;
 
   //Constructor, primeste conexiunea la baza de data
@@ -23,7 +23,7 @@ class Yellow_marker {
   //Returneaza datele din tabel - Get table data
   public function read() {
     //Creaza query - Create query
-    $query = 'SELECT latitude, longitude, uid_volunteer, time FROM ' . $this->table_name;
+    $query = 'SELECT latitude, longitude, email_volunteer, time FROM ' . $this->table_name;
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -48,7 +48,7 @@ class Yellow_marker {
   //Retruneaza o singura linie - Get a single trader_line
   public function read_single() {
     //Creaza query - Create query
-    $query = 'SELECT latitude, longitude, uid_volunteer, time FROM ' . $this->table_name . ' WHERE latitude = ? AND longitude = ? LIMIT 0,1';
+    $query = 'SELECT latitude, longitude, email_volunteer, time FROM ' . $this->table_name . ' WHERE latitude = ? AND longitude = ? LIMIT 0,1';
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -67,7 +67,7 @@ class Yellow_marker {
     // -- makes no sense to pass data to longitude and latitude again
     $this->latitude = $row['latitude'];
     $this->longitude = $row['longitude'];
-    $this->uid_volunteer = $row['uid_volunteer'];
+    $this->email_volunteer = $row['email_volunteer'];
     $this->time = $row['time'];
   }
 
@@ -81,7 +81,7 @@ class Yellow_marker {
     Tests must be performed to determin if this approach is better. (in the end this will compare all markers against some values )
     */
     //This 0.2 difference represents roughly 31.11 km
-    $query = 'SELECT latitude, longitude, uid_volunteer, time FROM ' . $this->table_name .
+    $query = 'SELECT latitude, longitude, email_volunteer, time FROM ' . $this->table_name .
     ' WHERE (latitude BETWEEN :latitude_down  AND :latitude_up ) AND '.
     '(longitude BETWEEN :longitude_down AND :longitude_up)';
     //Pregateste statement - Prepare statement
@@ -100,7 +100,7 @@ class Yellow_marker {
   //Creaza o noua intrare in tabel - Create new entry in table
   public function create() {
     //Creaza query - Create query
-    $query = "INSERT INTO " . $this->table_name . " (latitude, longitude, uid_volunteer, time)" . " VALUES(:latitude, :longitude, :uid_volunteer, :time)";
+    $query = "INSERT INTO " . $this->table_name . " (latitude, longitude, email_volunteer, time)" . " VALUES(:latitude, :longitude, :email_volunteer, :time)";
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -110,7 +110,7 @@ class Yellow_marker {
     //Bind data
     $stmt->bindParam(':latitude', floatval($this->latitude));
     $stmt->bindParam(':longitude', floatval($this->longitude));
-    $stmt->bindParam(':uid_volunteer', $this->uid_volunteer);
+    $stmt->bindParam(':email_volunteer', $this->email_volunteer);
     $stmt->bindParam(':time', $this->time);
 
     //Executa query - Execute query

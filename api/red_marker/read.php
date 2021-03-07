@@ -31,8 +31,10 @@
         //'uid' => $uid,
         'latitude' => $latitude,
         'longitude' => $longitude,
-        'uid_volunteer' => $uid_volunteer,
+        'email_volunteer' => $email_volunteer,
         'time' => $time,
+        'likes' => $likes,
+        'dislikes' => $dislikes,
         'radius' => $radius
       );
 
@@ -42,10 +44,12 @@
     }
 
     // Turn to JSON & output
+    http_response_code(200);
     echo json_encode($red_marker_arr);
 
   } else {
     // No Blue Markers
+    http_response_code(404);
     echo json_encode(
       array('message' => 'No Red Markers Found')
     );

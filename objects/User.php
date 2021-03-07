@@ -7,8 +7,7 @@ class User {
   private $table_name = "users";
 
  //Atribute relative la tabel
- public $uid;
- public $mac_user;
+ public $vendor_id;
  public $blocked;
 
   //Constructor, primeste conexiunea la baza de data
@@ -16,58 +15,57 @@ class User {
     $this->conn = $database;
   }
 
-  //Metode CRUD pentru tabel - CRUD methods for accessing the table
+  //CRUD methods for accessing the table
 
-  //Returneaza datele din tabel - Get table data
+  //Get table data
   public function read() {
-    //Creaza query - Create query
-    $query = 'SELECT uid, MAC_user, blocked FROM ' . $this->table_name . ' ORDER BY uid ASC;';
+    //Create query
+    $query = 'SELECT vendor_id, blocked FROM ' . $this->table_name . ';';// ORDER BY vendor_id ASC
 
-    //Pregateste statement - Prepare statement
+    //Prepare statement
     $stmt = $this->conn->prepare($query);
 
-    //Executa query - Execute query
+    //Execute query
     $stmt->execute();
 
     return $stmt;
   }
 
-  //Retruneaza o singura linie - Get a single trader_line
+  //Get a single trader_line
   public function read_single() {
-    //Creaza query - Create query
-    $query = 'SELECT uid, MAC_user, blocked FROM ' . $this->table_name . ' WHERE uid = ? LIMIT 0,1';
+    //Create query
+    $query = 'SELECT vendor_id, blocked FROM ' . $this->table_name . ' WHERE vendor_id = ? LIMIT 0,1';
 
-    //Pregateste statement - Prepare statement
+    //Prepare statement
     $stmt = $this->conn->prepare($query);
 
     //Bind UID
-    $stmt->bindParam(1, $this->uid);
+    $stmt->bindParam(1, $this->vendor_id);
 
-    //Executa query - Execute query
+    //Execute query
     $stmt->execute();
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    //seteaza proprietatile(atributele public) - Set proprierties (public attributes)
-    $this->uid = $row['uid'];
-    $this->mac_user = $row['MAC_user'];
+    // Set proprierties (public attributes)
+    $this->vendor_id = $row['vendor_id'];
     $this->blocked = $row['blocked'];
   }
 
-  //Creaza o noua intrare in tabel - Create new entry in table
+  //Create new entry in table
   public function create() {
-    //Creaza query - Create query
-    $query = "INSERT INTO " . $this->table_name . " (MAC_user)" . " VALUES(:mac)";
+    //Create query
+    $query = "INSERT INTO " . $this->table_name . " (vendor_id)" . " VALUES(:vendor)";
 
-    //Pregateste statement - Prepare statement
+    //Prepare statement
     $stmt = $this->conn->prepare($query);
 
     //Clean data (done in create.php)
 
     //Bind data
-    $stmt->bindParam(':mac', $this->mac_user);
+    $stmt->bindParam(':vendor', $this->vendor_id);
 
-    //Executa query - Execute query
+    //Execute query
     if($stmt->execute()){
       return true;
     }
@@ -75,42 +73,18 @@ class User {
     //Error $stmt->error;
     return false;
   }
-
-  //Update o linie din tabel - Update a line form table
-  public function update(){
-    //Creaza query - Create query
-    $query = 'UPDATE ' . $this->table_name . ' SET MAC_user = :mac WHERE uid = :uid';
-
-    //Pregateste statement - Prepare statement
-    $stmt = $this->conn->prepare($query);
-
-    //Clean data
-
-    //Bind data
-    $stmt->bindParam(':uid', $this->uid);
-    $stmt->bindParam(':mac', $this->mac_user);
-
-    //Executa query - Execute query
-    if($stmt->execute()){
-      return true;
-    }
-
-    //Error $stmt->error;
-    return false;
-  }
-
   //Block a user - bs means blocked by server
   public function blocked(){
-    //Creaza query - Create query
-    $query = 'UPDATE ' . $this->table_name . ' SET blocked = "bs" WHERE uid = :uid';
+    //Create query
+    $query = 'UPDATE ' . $this->table_name . ' SET blocked = "bs" WHERE vendor_id = :vendor_id';
 
-    //Pregateste statement - Prepare statement
+    //Prepare statement
     $stmt = $this->conn->prepare($query);
 
-    //Executa query - Execute query
-    $stmt->bindParam(':uid', $this->uid);
+    //Execute query
+    $stmt->bindParam(':vendor_id', $this->vendor_id);
     if($stmt->execute()){
-      echo $this->uid . "a fost blocat";
+     // echo $this->uid . "blocked";
       return true;
     }
 
@@ -121,7 +95,7 @@ class User {
   //Sterge o linie din tabel - Delete row
   public function delete() {
     //Creaza query - create query
-    $query = 'DELETE FROM ' . $this->table_name . ' WHERE uid = :uid';
+    $query = 'DELETE FROM ' . $this->table_name . ' WHERE vendor_id = :vendor_id';
 
     // Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -129,7 +103,7 @@ class User {
     // Clean data
 
     // Bind data
-    $stmt->bindParam(':uid', $this->uid);
+    $stmt->bindParam(':vendor_id', $this->vendor_id);
 
     // Execute query
     if($stmt->execute()) {
@@ -140,4 +114,26 @@ class User {
     return false;
   }
 }
+
+/*
+  //-->Must be refactored to delete row and insert new one. Is this useful?
+  //Update a line form table
+
+  public function update(){
+    //Create query
+    $query = 'UPDATE ' . $this->table_name . ' SET vendor_id = :vendor WHERE vendor_id = :vendor_same';
+    //Prepare statement
+    $stmt = $this->conn->prepare($query);
+    //Clean data
+    //Bind data
+    $stmt->bindParam(':vendor_same', $this->vendor_id);
+    $stmt->bindParam(':vendor', $this->vendor_id);
+    //Executa query - Execute query
+    if($stmt->execute()){
+      return true;
+    }
+    //Error $stmt->error;
+    return false;
+  }
+  */
 ?>

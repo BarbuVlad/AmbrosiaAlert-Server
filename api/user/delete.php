@@ -17,9 +17,9 @@
   $user = new User($db);
 
   //get data from request
-  $data = json_decode(file_get_contents("php://input"), true);//data from body of the request (uid)
+  $data = json_decode(file_get_contents("php://input"), true);//data from body of the request (vendor_id)
 
-  $user->uid = $data['uid'];
+  $user->vendor_id = $data['vendor_id'];
 
   if($user->delete()){
     http_response_code(200);
