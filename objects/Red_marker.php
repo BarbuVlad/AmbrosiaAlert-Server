@@ -187,6 +187,37 @@ class Red_marker {
     return false;
   }
 
+  public function like($factor){
+    $query = "UPDATE $this->table_name SET likes = likes + :factor WHERE latitude = :latitude AND longitude = :longitude";
+
+    $stmt = $this->conn->prepare($query);
+
+    $stmt->bindParam(":factor", $factor);
+    $stmt->bindParam(":latitude", $this->latitude);
+    $stmt->bindParam(':longitude', $this->longitude);
+
+    if($stmt->execute()){
+      return true;
+    }
+    return false;
+  }
+
+  public function dislike($factor){
+    $query = "UPDATE $this->table_name SET dislikes = dislikes - :factor WHERE latitude = :latitude AND longitude = :longitude";
+
+    $stmt = $this->conn->prepare($query);
+
+    $stmt->bindParam(":factor", $factor);
+    $stmt->bindParam(":latitude", $this->latitude);
+    $stmt->bindParam(':longitude', $this->longitude);
+
+    if($stmt->execute()){
+      return true;
+    }
+    return false;
+  }
+
+
   //Methods not intended for API requests
     public function _increment_confrimations($confirmations, $latitude){
       $query = 'UPDATE ' . $this->table_name . ' SET likes= :likes WHERE latitude = :latitude ';

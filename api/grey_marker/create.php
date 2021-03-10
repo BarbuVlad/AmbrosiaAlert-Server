@@ -23,7 +23,7 @@
   //pass data to user
   $grey_marker->latitude = $data['latitude'];
   $grey_marker->longitude = $data['longitude'];
-  $grey_marker->uid_volunteer = $data['uid_volunteer'];//if exists
+  $grey_marker->uid_volunteer = $data['email_volunteer'];//if exists
   $grey_marker->time_of_delete = date('Y-m-d-H-i-s');
   if($grey_marker->create()){
       http_response_code(200);
