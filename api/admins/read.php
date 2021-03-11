@@ -37,10 +37,12 @@
     }
 
     // Turn to JSON & output
+    http_response_code(200);
     echo json_encode($admin_arr);
 
   } else {
     // No Posts
+    http_response_code(404);
     echo json_encode(
       array('message' => 'No Admin Found')
     );

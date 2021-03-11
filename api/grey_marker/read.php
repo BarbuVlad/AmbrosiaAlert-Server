@@ -31,7 +31,7 @@
         //'uid' => $uid,
         'latitude' => $latitude,
         'longitude' => $longitude,
-        'uid_volunteer' => $uid_volunteer,
+        'email_volunteer' => $email_volunteer,
         'time_of_delete' => $time_of_delete
       );
 
@@ -41,10 +41,12 @@
     }
 
     // Turn to JSON & output
+    http_response_code(200);
     echo json_encode($grey_marker_arr);
 
   } else {
     // No grey Markers
+    http_response_code(404);
     echo json_encode(
       array('message' => 'No grey Markers Found')
     );

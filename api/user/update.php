@@ -6,6 +6,10 @@
   header("Access-Control-Max-Age: 3600");
   header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods, Authorization, X-Requested-With');
   // json header can be passed for user data
+  // Update was rendered obsolete after arch. refactor. Must be adapted
+  http_response_code(405);
+  echo json_encode(array("message" => "Update not supported!"));
+  exit(0);
 
   include_once '../../config/Database.php';
   include_once '../../objects/User.php';
@@ -21,7 +25,7 @@
   $user->mac_user = $data['mac_user'];
   $user->uid = $data['uid'];
 
-  if($user->update()){
+  if(true){//$user->update()
     http_response_code(200);
     echo json_encode(array("message" => "User updated"));
   }

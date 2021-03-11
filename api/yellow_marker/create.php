@@ -24,7 +24,7 @@
   //get data from request
   $data = json_decode(file_get_contents("php://input"), true);//data from body of the request
   //pass data to new_volunteer
-  $new_volunteer->uid = $data['uid_volunteer'];
+  $new_volunteer->email = $data['email_volunteer'];
   //read this one new_volunteer
   $new_volunteer->read_single();
 
@@ -35,7 +35,7 @@
   } else {
   $yellow_marker->latitude = $data['latitude'];
   $yellow_marker->longitude = $data['longitude'];
-  $yellow_marker->uid_volunteer = isset($data['uid_volunteer']) ? $data['uid_volunteer'] : null;//if exists
+  $yellow_marker->email_volunteer = isset($data['email_volunteer']) ? $data['email_volunteer'] : null;//if exists
   $yellow_marker->time = date('Y-m-d-H-i-s');
   if($yellow_marker->create()){
       http_response_code(200);

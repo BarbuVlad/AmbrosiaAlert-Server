@@ -13,17 +13,16 @@
   // Instantiate a table object
   $user = new User($db);
 
-  // Get uid
-  $user->uid = isset($_GET['uid']) ? $_GET['uid'] : die(); //if there is a query string in the URL then use it, else die()=stop
+  // Get vendor_id
+  $user->vendor_id = isset($_GET['vendor_id']) ? $_GET['vendor_id'] : die(); //if there is a query string in the URL then use it, else die()=stop
 
   //read this one user
   $user->read_single();
 
-  if($user->uid!=null){ // if user exists
+  if($user->vendor_id!=null){ // if user exists
     //Create array and send it as JSON
     $user_arr = array(
-      'uid' => $user->uid,
-      'mac_user' => $user->mac_user,
+      'vendor_id' => $user->vendor_id,
       'blocked' => $user->blocked
     );
     http_response_code(200);

@@ -29,7 +29,7 @@
     $yellow_marker_arr = array(
       'latitude' => $yellow_marker->latitude,
       'longitude' => $yellow_marker->longitude,
-      'uid_volunteer' => $yellow_marker->uid_volunteer,
+      'email_volunteer' => $yellow_marker->email_volunteer,
       'time' => $yellow_marker->time
     );
     http_response_code(200);
@@ -37,6 +37,7 @@
     echo json_encode($yellow_marker_arr);
   }
   else {//if yellow_marker dose NOT exist
+    http_response_code(404);
     echo json_encode(array('message'=>"yellow_marker dose NOT exist"));
   }
 ?>

@@ -25,7 +25,7 @@
   $data = json_decode(file_get_contents("php://input"), true);//data from body of the request
   //pass data to user
 
-  $user->uid = $data['uid_user'];
+  $user->vendor_id = $data['vendor_id'];
   //read this one user
   $user->read_single();
 
@@ -36,7 +36,7 @@
   } else {
   $blue_marker->latitude = $data['latitude'];
   $blue_marker->longitude = $data['longitude'];
-  $blue_marker->uid_user = $data['uid_user'];//if exists
+  $blue_marker->vendor_id = $data['vendor_id'];//if exists
   $blue_marker->time = date('Y-m-d-H-i-s');
   if($blue_marker->create()){
       http_response_code(200);

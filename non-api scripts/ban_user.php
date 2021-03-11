@@ -34,9 +34,9 @@
 	//while to read each user
     while($row = $result->fetch(PDO::FETCH_ASSOC)){
 		//if a user is blocked , there is no need to check again  TO IMPLEMENT WHEN PROJECT EXTENDED
-		echo $row['uid'];
+		echo $row['vendor_id'];
 		//give a uid to the instance of table object
-		$user->uid=$row['uid'];
+		$user->vendor_id=$row['vendor_id'];
 		//initiate total time of 5min(3000sec) in which a user may put 3 blue markers? 300 sec = 5 min
 		$total_mark = 1;
 		$total_time = 300;
@@ -45,11 +45,11 @@
 		$time_span = array();
 		reset($time_span);
 
-		$str = $str."\n___________________________________________________________________\n\n User id: ".$row['uid']."\n Markers: \n";
+		$str = $str."\n___________________________________________________________________\n\n User id: ".$row['vendor_id']."\n Markers: \n";
 	  //while to read all blue markers for each user
 	  foreach($blue_arr as $row2){
-			echo "user_id: ".$row2['uid_user'];
-		  if($row['uid'] === $row2['uid_user']){
+			echo "user vendor_id: ".$row2['vendor_id'];
+		  if($row['vendor_id'] === $row2['vendor_id']){
 			    //for each user create an array with times for all his blue markers
 					//mult de modificat, posibil sa mearga
 				//$blue_marker_item[] = array('time' => $row2['time']);

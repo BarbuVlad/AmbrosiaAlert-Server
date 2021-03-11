@@ -10,10 +10,9 @@ class Blue_marker {
   private $table_name = "blue_markers";
 
  //Atribute relative la tabel
- //public $uid;
  public $latitude;
  public $longitude;
- public $uid_user;
+ public $vendor_id;
  public $time;
   //Constructor, primeste conexiunea la baza de data
   public function __construct($database){
@@ -25,7 +24,7 @@ class Blue_marker {
   //Returneaza datele din tabel - Get table data
   public function read() {
     //Creaza query - Create query
-    $query = 'SELECT latitude, longitude, uid_user, time FROM ' . $this->table_name;
+    $query = 'SELECT latitude, longitude, vendor_id, time FROM ' . $this->table_name;
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -39,7 +38,7 @@ class Blue_marker {
   //Retruneaza o singura linie - Get a single trader_line
   public function read_single() {
     //Creaza query - Create query
-    $query = 'SELECT latitude, longitude, uid_user, time FROM ' . $this->table_name . ' WHERE latitude = ? AND longitude = ? LIMIT 0,1';
+    $query = 'SELECT latitude, longitude, vendor_id, time FROM ' . $this->table_name . ' WHERE latitude = ? AND longitude = ? LIMIT 0,1';
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -54,17 +53,17 @@ class Blue_marker {
     $row = $stmt->fetch(PDO::FETCH_ASSOC);// if dose not exist, will return null
 
     //seteaza proprietatile(atributele public) - Set proprierties (public attributes)
-    //$this->uid = $row['uid'];
+    
     $this->latitude = $row['latitude'];
     $this->longitude = $row['longitude'];
-    $this->uid_user = $row['uid_user'];
+    $this->vendor_id = $row['vendor_id'];
     $this->time = $row['time'];
   }
 
   //Creaza o noua intrare in tabel - Create new entry in table
   public function create() {
     //Creaza query - Create query
-    $query = "INSERT INTO " . $this->table_name . " (latitude, longitude, uid_user, time)" . " VALUES(:latitude, :longitude, :uid_user, :time)";
+    $query = "INSERT INTO " . $this->table_name . " (latitude, longitude, vendor_id, time)" . " VALUES(:latitude, :longitude, :vendor_id, :time)";
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -74,7 +73,7 @@ class Blue_marker {
     //Bind data
     $stmt->bindParam(':latitude', floatval($this->latitude));
     $stmt->bindParam(':longitude', floatval($this->longitude));
-    $stmt->bindParam(':uid_user', $this->uid_user);
+    $stmt->bindParam(':vendor_id', $this->vendor_id);
     $stmt->bindParam(':time', $this->time);
 
     //Execute query

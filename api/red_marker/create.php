@@ -31,10 +31,10 @@ If it is not, then the confirmation factor of that other red marker will increme
 
   //pass data to volunteer
 
-  $volunteer->uid = $data['uid_volunteer'];
+  $volunteer->email = $data['email_volunteer'];
 
   //read this one volunteer
-  if($data['uid_volunteer'] != null){
+  if($data['email_volunteer'] != null){
 
     $volunteer->read_single();
     //read does not happen , result is null
@@ -51,7 +51,7 @@ If it is not, then the confirmation factor of that other red marker will increme
 
   $red_marker->latitude = $data['latitude'];
   $red_marker->longitude = $data['longitude'];
-  $red_marker->uid_volunteer = $data['uid_volunteer'];//if exists
+  $red_marker->email_volunteer = $data['email_volunteer'];//if exists
   $red_marker->time = date('Y-m-d-H-i-s');
 
   $created = $red_marker->create();

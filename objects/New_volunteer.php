@@ -7,9 +7,8 @@ class New_volunteer {
   private $table_name = "new_volunteers";
 
  //Atribute relative la tabel
- public $uid;
  public $phone;
- public $email;
+ public $email;// PK
  public $first_name;
  public $last_name;
  public $address;
@@ -22,12 +21,12 @@ class New_volunteer {
     $this->conn = $database;
   }
 
-  //Metode CRUD pentru tabel - CRUD methods for accessing the table
+  //CRUD methods for accessing the table
 
-  //Returneaza datele din tabel - Get table data
+  //Get table data
   public function read() {
     //Creaza query - Create query
-    $query = 'SELECT uid, phone, email, first_name, last_name, address, blocked, confirmations FROM ' . $this->table_name . ' ORDER BY uid ASC;';
+    $query = 'SELECT email, phone, first_name, last_name, address, blocked, confirmations FROM ' . $this->table_name . ';';
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -41,13 +40,13 @@ class New_volunteer {
   //Retruneaza o singura linie - Get a single trader_line
   public function read_single() {
     //Creaza query - Create query
-    $query = 'SELECT uid, phone, email, first_name, last_name, address, blocked, confirmations FROM ' . $this->table_name . ' WHERE uid = ? LIMIT 0,1';
+    $query = 'SELECT email, phone, first_name, last_name, address, blocked, confirmations FROM ' . $this->table_name . ' WHERE email = ? LIMIT 0,1';
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
 
-    //Bind UID
-    $stmt->bindParam(1, $this->uid);
+    //Bind email
+    $stmt->bindParam(1, $this->email);
 
     //Executa query - Execute query
     $stmt->execute();
@@ -55,9 +54,8 @@ class New_volunteer {
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     //seteaza proprietatile(atributele public) - Set proprierties (public attributes)
-    $this->uid = $row['uid'];
-    $this->phone = $row['phone'];
     $this->email = $row['email'];
+    $this->phone = $row['phone'];
     $this->first_name = $row['first_name'];
     $this->last_name = $row['last_name'];
     $this->address = $row['address'];
@@ -65,14 +63,34 @@ class New_volunteer {
     $this->confirmations = $row['confirmations'];
   }
 
-  public function _read_all_data() {
+  //Retruneaza email & password
+  public function read_login() {
     //Creaza query - Create query
-    $query = 'SELECT uid, phone, email, first_name, last_name, address, blocked, confirmations, password FROM ' . $this->table_name . ' ORDER BY uid ASC;';
+    $query = 'SELECT email, password FROM ' . $this->table_name . ' WHERE email = :email LIMIT 0,1';
+    //Prepare statement
+    $stmt = $this->conn->prepare($query);
+    //Clean data
+    $this->email = trim($this->email);
+    if (!preg_match('/^.*@.*\..*$/',$this->email)){return 1;}
+    //Bind data
+    $stmt->bindParam(':email', $this->email);
 
-    //Pregateste statement - Prepare statement
+    // Execute query
+    try{
+    $stmt->execute();
+    }catch(Exception $e){echo $e;}
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $row;
+  }
+
+  public function _read_all_data() {
+    //Create query
+    $query = 'SELECT email, phone, first_name, last_name, address, blocked, confirmations, password FROM ' . $this->table_name . ';';
+
+    //Prepare statement
     $stmt = $this->conn->prepare($query);
 
-    //Executa query - Execute query
+    //Execute query
     $stmt->execute();
 
     return $stmt;
@@ -116,7 +134,7 @@ class New_volunteer {
   //Update o linie din tabel - Update a line form table
   public function update(){
     //Creaza query - Create query
-    $query = 'UPDATE ' . $this->table_name . ' SET confirmations = :confirmations WHERE uid = :uid';
+    $query = 'UPDATE ' . $this->table_name . ' SET confirmations = :confirmations WHERE email = :email';
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -124,7 +142,7 @@ class New_volunteer {
     //Clean data
 
     //Bind data
-    $stmt->bindParam(':uid', $this->uid);
+    $stmt->bindParam(':email', $this->email);
     $stmt->bindParam(':confirmations', $this->confirmations);//modified
 
     //Executa query - Execute query
@@ -139,15 +157,15 @@ class New_volunteer {
   //Block a new_volunteer - bs means blocked by server
   public function blocked(){
     //Creaza query - Create query
-    $query = 'UPDATE ' . $this->table_name . ' SET blocked = "bs" WHERE uid = :uid';
+    $query = 'UPDATE ' . $this->table_name . ' SET blocked = "bs" WHERE email = :email';
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
 
     //Executa query - Execute query
-    $stmt->bindParam(':uid', $this->uid);
+    $stmt->bindParam(':email', $this->email);
     if($stmt->execute()){
-      echo $this->uid . "a fost blocat";
+     // echo $this->uid . "a fost blocat";
       return true;
     }
 
@@ -158,7 +176,7 @@ class New_volunteer {
   //Sterge o linie din tabel - Delete row
   public function delete() {
     //Creaza query - create query
-    $query = 'DELETE FROM ' . $this->table_name . ' WHERE uid = :uid';
+    $query = 'DELETE FROM ' . $this->table_name . ' WHERE email = :email';
 
     // Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -166,7 +184,7 @@ class New_volunteer {
     // Clean data
 
     // Bind data
-    $stmt->bindParam(':uid', $this->uid);
+    $stmt->bindParam(':email', $this->email);
 
     // Execute query
     if($stmt->execute()) {

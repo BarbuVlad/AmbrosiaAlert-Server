@@ -28,8 +28,7 @@
 
       //for this item make a new associative array with all data red
       $user_item = array(
-        'uid' => $uid,
-        'mac_user' => $MAC_user,
+        'vendor_id' => $vendor_id,
         'blocked' => $blocked
       );
 

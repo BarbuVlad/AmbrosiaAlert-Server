@@ -28,9 +28,8 @@
 
       //for this item make a new associative array with all data red
       $new_volunteer_item = array(
-        'uid' => $uid,
-        'phone' => $phone,
         'email' => $email,
+        'phone' => $phone,
         'first_name' => $first_name,
         'last_name' => $last_name,
         'address' => $address,
@@ -44,10 +43,12 @@
     }
 
     // Turn to JSON & output
+    http_response_code(200);
     echo json_encode($new_volunteer_arr);
 
   } else {
-    // No Blue Markers
+    // No Volunteer found
+    http_response_code(404);
     echo json_encode(
       array('message' => 'No new_volunteers Found')
     );

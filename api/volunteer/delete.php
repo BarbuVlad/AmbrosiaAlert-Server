@@ -19,7 +19,7 @@
   //get data from request
   $data = json_decode(file_get_contents("php://input"), true);//data from body of the request (uid)
 
-  $volunteer->uid = $data['uid'];
+  $volunteer->email = $data['email'];
 
   if($volunteer->delete()){
     http_response_code(200);

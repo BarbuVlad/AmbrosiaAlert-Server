@@ -27,7 +27,7 @@
     $blue_marker_arr = array(
       'latitude' => $blue_marker->latitude,
       'longitude' => $blue_marker->longitude,
-      'uid_user' => $blue_marker->uid_user,
+      'vendor_id' => $blue_marker->vendor_id,
       'time' => $blue_marker->time
     );
     http_response_code(200);
@@ -35,6 +35,7 @@
     echo json_encode($blue_marker_arr);
   }
   else {//if blue_marker dose NOT exist
+    http_response_code(404);
     echo json_encode(array('message'=>"blue_marker dose NOT exist"));
   }
 ?>

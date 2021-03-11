@@ -29,14 +29,17 @@
     $red_marker_arr = array(
       'latitude' => $red_marker->latitude,
       'longitude' => $red_marker->longitude,
-      'uid_volunteer' => $red_marker->uid_volunteer,
-      'time' => $red_marker->time
+      'email_volunteer' => $red_marker->email_volunteer,
+      'time' => $red_marker->time,
+      'likes' => $red_marker->likes,
+      'dislikes' => $red_marker->dislikes
     );
     http_response_code(200);
     //send JSON
     echo json_encode($red_marker_arr);
   }
   else {//if red_marker dose NOT exist
+    http_response_code(404);
     echo json_encode(array('message'=>"red_marker dose NOT exist"));
   }
 ?>

@@ -27,7 +27,7 @@
     $grey_marker_arr = array(
       'latitude' => $grey_marker->latitude,
       'longitude' => $grey_marker->longitude,
-      'uid_volunteer' => $grey_marker->uid_volunteer,
+      'email_volunteer' => $grey_marker->email_volunteer,
       'time_of_delete' => $grey_marker->time_of_delete
     );
     http_response_code(200);

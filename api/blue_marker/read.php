@@ -27,10 +27,9 @@
 
       //for this item make a new associative array with all data red
       $blue_marker_item = array(
-        //'uid' => $uid,
         'latitude' => $latitude,
         'longitude' => $longitude,
-        'uid_user' => $uid_user,
+        'vendor_id' => $vendor_id,
         'time' => $time
       );
 
@@ -40,10 +39,12 @@
     }
 
     // Turn to JSON & output
+    http_response_code(200);
     echo json_encode($blue_marker_arr);
 
   } else {
     // No Blue Markers
+    http_response_code(404);
     echo json_encode(
       array('message' => 'No Blue Markers Found')
     );
