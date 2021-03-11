@@ -10,7 +10,7 @@ class Grey_marker {
  //public $uid;
  public $latitude;
  public $longitude;
- public $uid_volunteer;
+ public $email_volunteer;
  public $time_of_delete; // refers to red_marker (when was red_marker deleted)
 
   //Constructor, primeste conexiunea la baza de data
@@ -61,7 +61,7 @@ class Grey_marker {
   //Creaza o noua intrare in tabel - Create new entry in table
   public function create() {
     //Creaza query - Create query
-    $query = "INSERT INTO " . $this->table_name . " (latitude, longitude, email_volunteer, time_of_delete)" . " VALUES(:latitude, :longitude, :uid_volunteer, :time_of_delete)";
+    $query = "INSERT INTO " . $this->table_name . " (latitude, longitude, email_volunteer, time_of_delete)" . " VALUES(:latitude, :longitude, :email_volunteer, :time_of_delete)";
 
     //Pregateste statement - Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -71,7 +71,7 @@ class Grey_marker {
     //Bind data
     $stmt->bindParam(':latitude', floatval($this->latitude));
     $stmt->bindParam(':longitude', floatval($this->longitude));
-    $stmt->bindParam(':email_volunteer', $this->uid_volunteer);
+    $stmt->bindParam(':email_volunteer', $this->email_volunteer);
     $stmt->bindParam(':time_of_delete', $this->time_of_delete);
 
     //Executa query - Execute query

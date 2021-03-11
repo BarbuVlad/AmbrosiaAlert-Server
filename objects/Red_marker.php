@@ -107,7 +107,7 @@ class Red_marker {
       if(distance($this->latitude, $this->longitude, $marker['latitude'], $marker['longitude']) < $marker['radius']+40){//intersect more than 10 meters
         try{
           //increment the confirmations of that marker
-            $this->_increment_confrimations($marker['confirmations']+1,$marker['latitude']);
+            $this->_increment_confrimations($marker['likes']+1,$marker['latitude']);
             return 0;
         } catch(Exception $e){
             return 1;
@@ -239,7 +239,7 @@ class Red_marker {
 
     public function _read_intersecting_markers($latitude, $one_meter=0.000015){ // 0.000010 = 1.11meters
 
-      $query = 'SELECT latitude, longitude, confirmations, radius FROM ' . $this->table_name .
+      $query = 'SELECT latitude, longitude, likes, dislikes, radius FROM ' . $this->table_name .
       ' WHERE latitude BETWEEN :latitude_down  AND :latitude_up ';
 
       $stmt = $this->conn->prepare($query);

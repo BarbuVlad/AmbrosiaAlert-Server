@@ -69,15 +69,15 @@ class Feedback_volunteer {
     $stmt->bindParam(':type', $this->type);
 
     //Execute query
-try{
-    if($stmt->execute()){
-      return 0;
+  try{
+      if($stmt->execute()){
+        return 0;
+      }
+    } catch (PDOException $e){
+      if($stmt->errorInfo()[1] == "1062"){
+        return 1;
+      }
     }
-  } catch (PDOException $e){
-    if($stmt->errorInfo()[1] == "1062"){
-      return 1;
-    }
-  }
 
     //Error $stmt->error;
     return false;

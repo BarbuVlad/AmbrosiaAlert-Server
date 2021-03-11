@@ -39,7 +39,7 @@ Feedback from new_volunteer for red_marker
   }
   $feedback_new_volunteer->latitude = $data['latitude'];
   $feedback_new_volunteer->longitude = $data['longitude'];
-  $feedback_new_volunteer->email = $data['email'];
+  $feedback_new_volunteer->email_volunteer = $data['email'];
   $feedback_new_volunteer->time = date('Y-m-d-H-i-s');
   $feedback_new_volunteer->type = $data['type'];//'like' or 'dislike'
 

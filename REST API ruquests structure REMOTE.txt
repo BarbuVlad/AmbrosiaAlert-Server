@@ -6,19 +6,17 @@ Others return simple JSON { ... }
 ****************************************************************
 1. Users:
 
-	-read GET http://92.87.91.16/backend_code/api/user/read.php
+	-read GET http://192.168.206.128/AmbrosiaAlert-Server/api/user/read.php
 		Response 1:
 			200OK 
 				{
 				"data": [
 					{
-						"uid": "1",
-						"mac_user": "00:0u:95:2e:88:99",
+						"vendor_id": "1",
 						"blocked": "bs"
 					},
 					{
-						"uid": "2",
-						"mac_user": "00:0o:95:1s:98:33",
+						"vendor_id": "2",
 						"blocked": null
 					},.............................................
 		-------------------------------------------------------------------
@@ -27,12 +25,11 @@ Others return simple JSON { ... }
 		-------------------------------------------------------------------
 <<
 >>
-	-read_single GET http://92.87.91.16/backend_code/api/user/read_single.php?uid=3
+	-read_single GET http://192.168.206.128/AmbrosiaAlert-Server/api/user/read_single.php?vendor_id=1
 			Response 1:
 			200OK 
 				{
-					"uid": "3",
-					"mac_user": "00:0a:95:3a:45:47",
+					"vendor_id": "1",
 					"blocked": "bs"
 				}.............................................
 		-------------------------------------------------------------------
@@ -47,9 +44,10 @@ Others return simple JSON { ... }
 		-------------------------------------------------------------------
 <<
 >>
-	-create POST http://92.87.91.16/backend_code/api/user/create.php
+	-create POST http://192.168.206.128/AmbrosiaAlert-Server/api/user/create.php
+		To send:
 			{
-				"mac_user": "00-00-00-00-00-00"
+				"vendor_id": "2"
 			}
 			______________
 			Response 1:
@@ -60,35 +58,36 @@ Others return simple JSON { ... }
 		-------------------------------------------------------------------
 			Response 2:
 			500Server Error 
+			[possible that user exists; PK violation]
 		-------------------------------------------------------------------
 		*To be refactored (send more complete codes)
-		**To refactor mac_user to vendor ID
+		**To solve for 500 duplicate PK (send diffrent response)
 <<
 >>
-	-update PUT http://92.87.91.16/backend_code/api/user/update.php  (update the MAC of a user through uid)
+	-update PUT http://192.168.206.128/AmbrosiaAlert-Server/api/user/update.php
+	To send:
 				{
-					"uid": "6",
-					"mac_user": "00-00-00-00-00-11"
+
 				}
 				______________
 				Response 1:
-				200OK 
+				405OK 
 					{
-						"message": "User updated"
+						"message": "Update not supported!"
 					}
 			-------------------------------------------------------------------
 				Response 2:
 				500Server Error 
 			-------------------------------------------------------------------
 
-			*If no uid is provided or dose not exist in the table 200 OK is returned but no changes are made
-			**To be refactored (send more complete codes)
+			*Obsolete
 <<
 >>
 
-	-delete DELETE http://92.87.91.16/backend_code/api/user/delete.php
+	-delete DELETE http://192.168.206.128/AmbrosiaAlert-Server/api/user/delete.php
+		To send:
 				{
-					"uid": "6"
+					"vendor_id": "3"
 				}
 				______________
 				Response 1:
@@ -100,29 +99,28 @@ Others return simple JSON { ... }
 				Response 2:
 				500Server Error 
 			-------------------------------------------------------------------
-			*If no uid is provided or dose not exist in the table 200 OK is returned but no changes are made
+			*If no vendor_id is provided or dose not exist in the table 200 OK is returned but no changes are made
 			**To be refactored (send more complete codes)
 
 >>
 <<
 
 2. Volunteers:
-	-read GET http://92.87.91.16/backend_code/api/volunteer/read.php
+	-read GET http://192.168.206.128/AmbrosiaAlert-Server/api/volunteer/read.php
 		Response 1:
 		200OK 
 			{
 			"data": [
 				{
-					"uid": "137",
-					"phone": "test-val",
 					"email": "test-val",
+					"phone": "test-val",
 					"first_name": "test-val",
 					"last_name": "test-val",
 					"address": "test-val",
 					"blocked": null
 				},
 				{
-					"uid": "139",
+					"email": "139",
 					"phone": "test-val",
 					................................
 	-------------------------------------------------------------------
@@ -134,195 +132,854 @@ Others return simple JSON { ... }
 <<
 
 	-read_single GET 404 not found (not implemented)
-
-	-create POST http://92.87.91.16/backend_code/api/volunteer/create.php
+>>
+<<	
+	-create POST http://192.168.206.128/AmbrosiaAlert-Server/api/volunteer/create.php
+	To send:
 			{
+				"email": "test-val5@mail.com",
 				"phone": "test-val",
-				"email": "test-val",
 				"password": "test-val",
 				"first_name": "test-val",
 				"last_name": "test-val",
 				"address": "test-val"
 			}
 			*first_name, last_name, address are optional
-
-	-delete DELETE http://92.87.91.16/backend_code/api/volunteer/delete.php
+			_______________
+			Response 1:
+			200OK
+				{
+					"message": "volunteer created"
+				}
+			--------------------------------------------------------------------------
+			Response 2:
+			409Conflict
 			{
-				"uid": "4"
+    			"message": "email exists"
 			}
-	-update 404 not found (not implemented)
-
-	-login POST http://92.87.91.16/backend_code/api/volunteer/login.php
-
+			--------------------------------------------------------------------------
+			Response 3:
+			503Service Unavailable
 			{
-				"email": "test-val",
+				'message': 'ERROR occurred. volunteer NOT created'
+			}
+			--------------------------------------------------------------------------
+			Response 4:
+			500Server error
+			*No JSON message
+>>
+<<
+
+	-delete DELETE http://192.168.206.128/AmbrosiaAlert-Server/api/volunteer/delete.php
+	To send:
+			{
+				"email": "test-val5@mail.com"
+			}
+			______________
+			Response 1:
+			200OK
+			{
+				"message": "volunteer deleted"
+			}
+			* If no volunteer has that email, this response will be send 
+			(SQL can process successfully such a query)
+			----------------------------------------------------------------------------
+			Response 2:
+			503Service Unavailable
+			{
+				"message" => "ERROR occurred. volunteer NOT deleted"
+			}
+			----------------------------------------------------------------------------
+			Response 3:
+			500Server Error
+			*No JSON message
+
+>>
+<<
+
+	-update 404 not found (not implemented)
+>>
+<<
+
+	-login POST http://192.168.206.128/AmbrosiaAlert-Server/api/volunteer/login.php
+	To send
+			{
+				"email": "test-val@test.com",
 				"password": "test-val"
 			}
+			______________
+			Response 1:
+			200OK
+			{
+				"message": "volunteer_login_successfull",
+				"email": "test-val@test.com"
+			}
+			------------------------------------------------------------------------
+			Response 2:
+			403Forbidden
+			{
+    			"message": "no_such_volunteer_found"
+			}
+			*Either wrong password or email
+			-----------------------------------------------------------------------
+			Response 3:
+			500Server Error
+			*No JSON message
+
+
+>>
+<<
 
 3. New volunteers
-	-read GET http://92.87.91.16/backend_code/api/new_volunteer/read.php
+	-read GET http://192.168.206.128/AmbrosiaAlert-Server/api/new_volunteer/read.php
 
-	-read_single GET 404 not found (not implemented)
-
-	-create POST http://92.87.91.16/backend_code/api/new_volunteer/create.php
+	Response 1:
+	200OK
+	{
+		"data": [
 			{
+				"email": "test-val2@test.com",
 				"phone": "test-val",
-				"email": "test-val",
+				"first_name": "test-val",
+				"last_name": "test-val",
+				"address": "test-val",
+				"blocked": null,
+				"confirmations": "0"
+			},
+			.................................
+		]
+	}
+	-----------------------------------------------------------------------------------
+	Response 2:
+	404Not found
+	{
+	'message': 'No new_volunteers Found'
+	}
+	------------------------------------------------------------------------------------
+	Response 3:
+	500Server Error
+
+>>
+<<
+	-read_single GET 404 not found (not implemented)
+>>
+<<
+
+	-create POST http://192.168.206.128/AmbrosiaAlert-Server/api/new_volunteer/create.php
+	To send:
+			{
+				"email": "test-val@mail.com",
+				"phone": "test-val",
 				"password": "test-val",
 				"first_name": "test-val",
 				"last_name": "test-val",
 				"address": "test-val"
 			}
 			*first_name, last_name, address are optional
-
-	-delete DELETE http://92.87.91.16/backend_code/api/new_volunteer/delete.php
+			______________
+			Response 1:
+			200OK
 			{
-				"uid": "4"
+				"message": "new_volunteer created"
 			}
+			-----------------------------------------------------------------------------
+			Response 2:
+			409Conflict
+			{
+    			"message": "email exists"
+			}
+			--------------------------------------------------------------------------
+			Response 3:
+			503Service Unavailable
+			{
+				'message': 'ERROR occurred. volunteer NOT created'
+			}
+			--------------------------------------------------------------------------
+			Response 4:
+			500Server error
+			*No JSON message
+			
+>>
+<<
+
+	-delete DELETE http://192.168.206.128/AmbrosiaAlert-Server/api/new_volunteer/delete.php
+		To send:
+			{
+				"email": "test-val@mail.com"
+			}
+			______________
+			Response 1:
+			200OK
+			{
+				"message": "new_volunteer deleted"
+			}
+			* If no volunteer has that email, this response will be send 
+			(SQL can process successfully such a query)
+			----------------------------------------------------------------------------
+			Response 2:
+			503Service Unavailable
+			{
+				"message" => "ERROR occurred. new_volunteer NOT deleted"
+			}
+			----------------------------------------------------------------------------
+			Response 3:
+			500Server Error
+			*No JSON message
+
+>>
+<<
 	-update 404 not found (not implemented)
 
-	-login POST http://92.87.91.16/backend_code/api/new_volunteer/login.php
+>>
+<<
 
+	-login POST http://192.168.206.128/AmbrosiaAlert-Server/api/new_volunteer/login.php
+		To send:
 			{
-				"email": "test-val",
+				"email": "test-val2@test.com",
 				"password": "test-val"
 			}
+			______________
+			Response 1:
+			200OK
+			{
+				"message": "new_volunteer_login_successfull",
+				"email": "test-val2@test.com"
+			}
+			-----------------------------------------------------------------------------
+			Response 2:
+			403Forbidden
+			{
+    			"message": "no_such_volunteer_found"
+			}
+			*Either wrong password or email
+			-----------------------------------------------------------------------
+			Response 3:
+			500Server Error
+			*No JSON message
+
+>>
+<<
 
 4. Admins
 
--read GET http://92.87.91.16/backend_code/api/admins/read.php
+	-read GET http://192.168.206.128/AmbrosiaAlert-Server/api/admins/read.php
 
--create POST http://92.87.91.16/backend_code/api/admins/create.php
-	{
-		"name": "adminX",
-		"password": "123"
-	}
+		Response 1:
+		200OK
+		{
+			"data": [
+				{
+					"name": "admin123@gmail.com"
+				},
+				{
+					"name": "admin2021@gmail.com"
+				},
+				...................................
+			]
+		{
+		-------------------------------------------------------------------------
+		Response 2:
+		404Not Found
 
--login POST http://92.87.91.16/backend_code/api/admins/login.php
-	{
-		"name": "adminX",
-		"password": "123"
-	}
+		-------------------------------------------------------------------------
+		Response 3:
+		500Server Error
 
+>>
+<<
 
+	-create POST http://192.168.206.128/AmbrosiaAlert-Server/api/admins/create.php
+		To send:
+		{
+			"name": "admin_test",
+			"password": "123"
+		}
+		______________
+		Response 1:
+		{
+    		"message": "admin created"
+		}
+		-----------------------------------------------------------------------------
+		Response 2:
+		503Service Unavailable
+		{
+			'message': 'ERROR occurred. admin NOT created'
+		}
+		-----------------------------------------------------------------------------
+		Response 3:
+		500Server Error
+
+>>
+<<
+
+	-login POST http://192.168.206.128/AmbrosiaAlert-Server/api/admins/login.php
+	To send:
+		{
+			"name": "admin_test",
+			"password": "123"
+		}
+		______________
+		Response 1: 
+		200OK
+		{
+    		"message": "login successfull"
+		}
+		----------------------------------------------------------------------------
+		Response 2:
+		403Forbidden
+		{
+			"message": "no such admin found"
+		}
+		---------------------------------------------------------------------------
+		Response 3:
+		500Server Error
+
+>>
+<<
 5. Blue markers:
 
-	-read GET http://92.87.91.16/backend_code/api/blue_marker/read.php
+	-read GET http://192.168.206.128/AmbrosiaAlert-Server/api/blue_marker/read.php
 
-	-read_single GET http://92.87.91.16/backend_code/api/blue_marker/read_single.php?longitude=10.1234567&latitude=10.1234567
-				SOLVED *200 ok, not working!!
-				SOLVED**If the values provided do not reprezent an existing blue marker, returns 200 OK FALSE POSITIVE
-
-	-create POST http://92.87.91.16/backend_code/api/blue_marker/create.php
-
-				{
-					"longitude": "11.1234",
-					"latitude": "11.1234",
-					"uid_user": "5"
-				}
-			*If the uid_user dose not exist it returns status 500 Internal Server Error (nothing is added).(uid is optional tho).
-			SOLVED **If at error 1062 SQL returns status 500 Internal Server Error (nothing is added)
-
-
-	-update PUT  http://92.87.91.16/backend_code/api/blue_marker/update.php
-			** 405 Method not Allowed
-
-	-delete DELETE http://92.87.91.16/backend_code/api/blue_marker/delete.php
+		Response 1:
+		200OK
 			{
-				"longitude": "11.1233997345",
-				"latitude": "11.1233997345"
+				"data": [
+					{
+						"latitude": "0.1230000000",
+						"longitude": "0.1230000000",
+						"vendor_id": "test-val1",
+						"time": null
+					},
+					.........................................
+				]
 			}
-		SOLVED *Returns 200 OK everytime, dose not delete marker from table
-		##Solved by altering the DB: FLOAT(12,10) to DECIMAL (12,10)
+			-----------------------------------------------------------------------
+			Response 2:
+			404Not Found
+			{
+				'message': 'No Blue Markers Found'
+			}
+			-----------------------------------------------------------------------
+			Response 3:
+			500Server Error
+>>
+<<		
+
+	-read_single GET http://192.168.206.128/AmbrosiaAlert-Server/api/blue_marker/read_single.php?longitude=10.123&latitude=10.123
+		Response 1:
+		200OK
+			{
+				"latitude": "0.1230000000",
+				"longitude": "0.1230000000",
+				"vendor_id": "test-val1",
+				"time": null
+			}
+		----------------------------------------------------------------------------
+		Response 2:
+		404Not Found
+			{
+				"message": "blue_marker dose NOT exist"
+			}
+		----------------------------------------------------------------------------
+		Response 3:
+		500Server Error
+
+>>
+<<
+
+	-create POST http://192.168.206.128/AmbrosiaAlert-Server/api/blue_marker/create.php
+		To send:
+		{
+			"longitude": "1.123",
+			"latitude": "1.123",
+			"vendor_id": "2"
+		}
+		______________
+		Response 1:
+		200OK
+			{
+    			"message": "Blue marker created"
+			}
+		---------------------------------------------------------------------------------
+		Response 2:
+		403Forbidden
+		{
+    		"message": "ERROR occurred. User no longer has rights"
+		}
+		---------------------------------------------------------------------------------
+		Response 3:
+		503Service Unavailable
+		{
+			'message': 'ERROR occurred. Blue marker NOT created'
+		}
+		---------------------------------------------------------------------------------
+		Response 4:
+		500Server Error
+
+>>
+<<
+	-update PUT  http://192.168.206.128/AmbrosiaAlert-Server/api/blue_marker/update.php
+			** 405 Method not Allowed
+>>
+<<
+
+	-delete DELETE http://192.168.206.128/AmbrosiaAlert-Server/api/blue_marker/delete.php
+	To send:
+
+			{
+				"longitude": "1.123",
+				"latitude": "1.123"
+			}
+		______________
+		Response 1:
+		200OK
+		{
+    		"message": "Blue marker deleted"
+		}
+		----------------------------------------------------------------------------------
+		Response 2:
+		503Service Unavailable
+		{
+			"message": "ERROR occurred. Blue marker NOT deleted"
+		}
+		----------------------------------------------------------------------------------
+		Response 3:
+		500Server Error
+
+>>
+<<
 
 6. Yellow markers
 
 
-	-read GET http://92.87.91.16/backend_code/api/yellow_marker/read.php
+	-read GET http://192.168.206.128/AmbrosiaAlert-Server/api/yellow_marker/read.php
 
-	-read_single GET http://92.87.91.16/backend_code/api/yellow_marker/read_single.php?latitude=44.8200492859&longitude=25.0764064789
+	Response 1:
+	200OK
 
-	-read_area GET http://92.87.91.16/backend_code/api/yellow_marker/read_area.php?latitude=1.123&longitude=1.123
+
+	-------------------------------------------------------------------------------------
+	Response 2:
+	404Not Found
+	{
+		"message": "No Yellow Markers Found"
+	}
+	-------------------------------------------------------------------------------------
+	Response 3: 
+	500Server Error
+
+>>
+<<
+
+	-read_single GET http://192.168.206.128/AmbrosiaAlert-Server/api/yellow_marker/read_single.php?latitude=44.8200492859&longitude=25.0764064789
+
+	Response 1:
+	200OK
+
+	--------------------------------------------------------------------------------------
+	Response 2:
+	404Not Found
+	{
+    	"message": "yellow_marker dose NOT exist"
+	}
+	--------------------------------------------------------------------------------------
+	Response 3:
+	500Server Error
+
+>>
+<<
+
+	-read_area GET http://192.168.206.128/AmbrosiaAlert-Server/api/yellow_marker/read_area.php?latitude=1.123&longitude=1.123
 		*aprox. 31 sq. km. from given location
 
-	-create POST http://92.87.91.16/backend_code/api/yellow_marker/create.php
+		Response 1:
+		200OK
+
+		------------------------------------------------------------------------------------
+		Response 2:
+		404Not Found
+		{
+    		"message": "No yellow Markers Found"
+		}
+		------------------------------------------------------------------------------------
+		Response 3:
+		500Server Error
+
+>>
+<<
+
+	-create POST http://192.168.206.128/AmbrosiaAlert-Server/api/yellow_marker/create.php
+	To send:
 			{
 				"longitude": "10.1234",
 				"latitude": "10.1234",
-				"uid_volunteer": "1"
+				"email": "test-val2@test.com"
 			}
-			*uid_volunteer is optional
+			______________
+			Response 1:
+			200OK
+			{
+				"message": "yellow marker created"
+			}
+			---------------------------------------------------------------------------------
+			Response 2:
+			403Forbidden
+			{
+				'message': 'ERROR occurred. Volunteer no longer has rights'
+			}
+			---------------------------------------------------------------------------------
+			Response 3:
+			503Service Unavailable
+			{
+				'message': 'ERROR occurred. Yellow marker NOT created'
+			}
+			---------------------------------------------------------------------------------
+			Response 4:
+			500Server Error
 
-	-confirm POST http://92.87.91.16/backend_code/api/yellow_marker/confirm.php
+			*Duplicate PK not solved
+>>
+<<
+
+	-confirm POST http://192.168.206.128/AmbrosiaAlert-Server/api/yellow_marker/confirm.php
+	To send:
 		{
 			"longitude": "10.1234",
 			"latitude": "10.1234",
-			"uid_volunteer": "12",
-			"uid_volunteer_confirm": "13"
+			"email_volunteer": "test-val2@test.com",
+			"email_volunteer_confirm": "test-val@test.com"
 		}
-*uid_volunteer -> uid new_volunteer ce a pus acel marker yellow
-*uid_volunteer_confirm -> uid volunteer ce a confirmat acel marker yellow
-**Daca volunteer e blocat acesta poate in continuare sa confirme markere yellow!
+	*email_volunteer ->email new_volunteer ce a pus acel marker yellow
+	*email_volunteer_confirm -> email volunteer ce a confirmat acel marker yellow
+	______________
+	Response 1:
+	200OK
 
-	-delete DELETE http://92.87.91.16/backend_code/api/yellow_marker/delete.php
+	----------------------------------------------------------------------------------------
+	Response 2:
+	403Forbidden
+	{
+		'message' => 'ERROR_occurred. Volunteer no longer has rights'
+	}
+	----------------------------------------------------------------------------------------
+	Response 3:
+	503Service Unavailable
+	{
+    	"message": "ERROR occurred. Action cancelled !"
+	}		
+	----------------------------------------------------------------------------------------
+	Response 4:
+	500Server ERROR
+
+>>
+<<
+
+	-delete DELETE http://192.168.206.128/AmbrosiaAlert-Server/api/yellow_marker/delete.php
+	To send:
 			{
-				"longitude": "10.1234",
-				"latitude": "10.1234"
+				"longitude": "1.1234",
+				"latitude": "1.1234"
 			}
+			______________
+			Response 1:
+			200OK
+				{
+					"message": "Yellow marker deleted"
+				}
+			--------------------------------------------------------------------------------
+			Response 2:
+			503Service Unavailable
+			{
+				"message" => "ERROR occurred. Yellow marker NOT deleted"
+			}
+			--------------------------------------------------------------------------------
+			Response 3:
+			500Server Error
 
+>>
+<<
 
 7. Red markers:
 
-	-read GET http://92.87.91.16/backend_code/api/red_marker/read.php
+	-read GET http://192.168.206.128/AmbrosiaAlert-Server/api/red_marker/read.php
 
-	-read_single GET http://92.87.91.16/backend_code/api/red_marker/read_single.php?latitude=25.0751705170&longitude=44.8232307434
+		{
+		"data": [
+			{
+				"latitude": "0.0000000000",
+				"longitude": "0.0000000000",
+				"email_volunteer": null,
+				"time": null,
+				"likes": "24",
+				"dislikes": null,
+				"radius": null
+			}
+		]
+	}
+>>
+<<
+
+	-read_single GET http://192.168.206.128/AmbrosiaAlert-Server/api/red_marker/read_single.php?latitude=25.0751705170&longitude=44.8232307434
 			SOLVED*200 ok, not working!!
 			SOLVED** when the marker dose not exist it returnns 200 OK with FALSE POSITIVE
 
-	-read_area GET http://92.87.91.16/backend_code/api/red_marker/read_area.php?latitude=1.123&longitude=1.123
+			{
+				"latitude": "0.0000000000",
+				"longitude": "0.0000000000",
+				"email_volunteer": null,
+				"time": null,
+				"likes": "24",
+				"dislikes": null
+			}
+
+
+			{
+    			"message": "red_marker dose NOT exist"
+			}
+>>
+<<
+
+	-read_area GET http://192.168.206.128/AmbrosiaAlert-Server/api/red_marker/read_area.php?latitude=1.123&longitude=1.123
 			*aprox. 31 sq. km. from given location
 
-	-create POST http://92.87.91.16/backend_code/api/red_marker/create.php
-			{
-				"longitude": "35.1234502792",
-				"latitude": "35.1234502792",
-				"uid_volunteer": "1"
-			}
-			*if this marker is in area of another marker it won't be added, but the no. of confirmations for that other marker will +1
-			*if uid_volunteer dose not exist 500 Internal Server Error (nothing is added)
-			*uid_volunteer is optional
 
-	-delete DELETE http://92.87.91.16/backend_code/api/red_marker/delete.php
+			{
+    "data": [
+        {
+            "latitude": "0.0000000000",
+            "longitude": "0.0000000000",
+            "email_volunteer": null,
+            "time": null,
+            "likes": "24",
+            "dislikes": null,
+            "radius": null
+        }
+    ]
+}
+
+
+
+{
+    "message": "No Red Markers Found"
+}
+
+>>
+<<
+
+	-create POST http://192.168.206.128/AmbrosiaAlert-Server/api/red_marker/create.php
+	To send:
+			{
+				"longitude": "1.0",
+				"latitude": "1.0",
+				"email_volunteer": "test-val@test.com"
+			}
+			*if this marker is in area of another marker it won't be added, but the no. of likes for that other marker will +1
+			*if email dose not exist 500 Internal Server Error (nothing is added)
+			
+			{
+    			"message": "red marker created!"
+			}
+
+			{
+    			"message": "red marker NOT created! In area of other marker (incremented)"
+			}
+
+
+
+
+
+>>
+<<
+	-delete DELETE http://192.168.206.128/AmbrosiaAlert-Server/api/red_marker/delete.php
 			{
 				"longitude": "36.1234502792",
 				"latitude": "36.1234502792"
 			}
-			SOLVED*Returns 200 OK everytime, dose not delete marker from table
-			##Solved by altering the DB: FLOAT(12,10) to DECIMAL (12,10)
 
-	-update PUT  http://92.87.91.16/backend_code/api/red_marker/update.php
+
+			{
+    			"message": "Red marker deleted"
+			}
+
+>>
+<<
+
+	-update PUT  http://192.168.206.128/AmbrosiaAlert-Server/api/red_marker/update.php
 	** 405 Method not Allowed
 
 
 
 8. Grey markers
 
-	-read GET http://92.87.91.16/backend_code/api/grey_marker/read.php
+	-read GET http://192.168.206.128/AmbrosiaAlert-Server/api/grey_marker/read.php
 
-	-read_single GET http://92.87.91.16/backend_code/api/grey_marker/read_single.php?latitude=44.8200492859&longitude=25.0764064789
 
-	-create POST http://92.87.91.16/backend_code/api/grey_marker/create.php
+200OK
+...
+
+404Not Found
+	{
+    	"message": "No grey Markers Found"
+	}
+>>
+<<
+
+	-read_single GET http://192.168.206.128/AmbrosiaAlert-Server/api/grey_marker/read_single.php?latitude=44.8200492859&longitude=25.0764064789
+
+
+>>
+<<
+	-create POST http://192.168.206.128/AmbrosiaAlert-Server/api/grey_marker/create.php
 			{
 				"longitude": "10.1234",
 				"latitude": "10.1234",
-				"uid_volunteer": "1"
+				"email_volunteer": "test@mail.com"
 			}
-			*uid_volunteer is optional
 
-	-delete DELETE http://92.87.91.16/backend_code/api/grey_marker/delete.php
+
+res
+			{
+    			"message": "grey marker created"
+			}
+			
+>>
+<<
+
+	-delete DELETE http://192.168.206.128/AmbrosiaAlert-Server/api/grey_marker/delete.php
 			{
 				"longitude": "10.1234",
 				"latitude": "10.1234"
 			}
 
+
+			{
+    			"message": "grey marker deleted"
+			}
+>>
+<<
+
 	-update 405 Method Not Allowed
+>>
+<<
+
+9. Feedback
+	-read GET 
+	-read_single GET
+
+	-create (user) POST http://192.168.206.128/AmbrosiaAlert-Server/api/feedback/user.php
+	To send:
+			{
+				"vendor_id": "2",
+				"longitude": "0.000000",
+				"latitude": "0.0000000",
+				"type": "like"
+			}
+			!! "type" can be only "like" or "dislike"
+
+			Response 1:
+			200OK 
+				{
+					"message": "Feedback of user created (like)"
+				}.............................................
+		-------------------------------------------------------------------
+			Response 2:
+			403Forbidden
+				{
+					"message": "Feedback of user NOT created (feedback exists)"
+				}
+		-------------------------------------------------------------------
+			Response 3:
+			503Server Error 
+			{
+				'message' => 'ERROR occurred. Feedback of user NOT created'
+			}
+		-------------------------------------------------------------------
+			Response 4:
+			500Server Error
+			{
+				'message' => 'ERROR occurred. Internal database error (failed transaction; rollback done)'
+			}
+			!!JSON can be null
+		-------------------------------------------------------------------
+<<
+>>
+	-create (volunteer) POST http://192.168.206.128/AmbrosiaAlert-Server/api/feedback/volunteer.php
+	To send:
+			{
+				"email": "test-val@test.com",
+				"longitude": "0.000000",
+				"latitude": "0.0000000",
+				"type": "dislike"
+			}
+			!! "type" can be only "like" or "dislike"
+
+			Response 1:
+			200OK 
+			{
+				"message": "Feedback of volunteer created (dislike)"
+			}.............................................
+		-------------------------------------------------------------------
+			Response 2:
+			403Forbidden
+			{
+				"message": "Feedback of volunteer NOT created (feedback exists)"
+			}
+		-------------------------------------------------------------------
+			Response 3:
+			503Server Error 
+			{
+				'message' => 'ERROR occurred. Feedback of user NOT created.'
+			}
+		-------------------------------------------------------------------
+			Response 4:
+			500Server Error
+			{
+				'message' => 'ERROR occurred. Internal database error (failed transaction; rollback done)'
+			}
+			!!JSON can be null
+		-------------------------------------------------------------------
+<<
+>>
+-create (new_volunteer) POST http://192.168.206.128/AmbrosiaAlert-Server/api/feedback/new_volunteer.php
+	To send:
+			{
+				"email": "test-val@test.com",
+				"longitude": "0.000000",
+				"latitude": "0.0000000",
+				"type": "like"
+			}
+			!! "type" can be only "like" or "dislike"
+
+			Response 1:
+			200OK 
+			{
+				"message": "Feedback of new_volunteer created (like)"
+			}.............................................
+		-------------------------------------------------------------------
+			Response 2:
+			403Forbidden
+			{
+				"message": "Feedback of new_volunteer NOT created (feedback exists)"
+			}
+		-------------------------------------------------------------------
+			Response 3:
+			503Server Error 
+			{
+				'message' => 'ERROR occurred. Feedback of user NOT created.'
+			}
+		-------------------------------------------------------------------
+			Response 4:
+			500Server Error
+			{
+				'message' => 'ERROR occurred. Internal database error (failed transaction; rollback done)'
+			}
+			!!JSON can be null
+		-------------------------------------------------------------------
+
+
+	-create (volunteer) POST 
+			
+
+	-delete
+	-update

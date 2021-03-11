@@ -43,10 +43,12 @@
     }
 
     // Turn to JSON & output
+    http_response_code(200);
     echo json_encode($new_volunteer_arr);
 
   } else {
-    // No Blue Markers
+    // No Volunteer found
+    http_response_code(404);
     echo json_encode(
       array('message' => 'No new_volunteers Found')
     );

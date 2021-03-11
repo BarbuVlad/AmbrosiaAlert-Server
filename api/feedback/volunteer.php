@@ -35,11 +35,11 @@ Feedback from volunteer for red_marker
     //if volunteer is blocked throw error code 403 Forbidden
     http_response_code(403);
     echo json_encode(array('message' => 'ERROR occurred. volunteer no longer has rights'));
-    exit();
+    exit(1);
   }
   $feedback_volunteer->latitude = $data['latitude'];
   $feedback_volunteer->longitude = $data['longitude'];
-  $feedback_volunteer->email = $data['email'];
+  $feedback_volunteer->email_volunteer = $data['email'];
   $feedback_volunteer->time = date('Y-m-d-H-i-s');
   $feedback_volunteer->type = $data['type'];//'like' or 'dislike'
 
