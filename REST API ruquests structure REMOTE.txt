@@ -6,7 +6,7 @@ Others return simple JSON { ... }
 ****************************************************************
 1. Users:
 
-	-read GET http://192.168.206.128/AmbrosiaAlert-Server/api/user/read.php
+	-read GET http://92.87.91.16/backend_code/api/user/read.php
 		Response 1:
 			200OK 
 				{
@@ -25,7 +25,7 @@ Others return simple JSON { ... }
 		-------------------------------------------------------------------
 <<
 >>
-	-read_single GET http://192.168.206.128/AmbrosiaAlert-Server/api/user/read_single.php?vendor_id=1
+	-read_single GET http://92.87.91.16/backend_code/api/user/read_single.php?vendor_id=1
 			Response 1:
 			200OK 
 				{
@@ -44,7 +44,7 @@ Others return simple JSON { ... }
 		-------------------------------------------------------------------
 <<
 >>
-	-create POST http://192.168.206.128/AmbrosiaAlert-Server/api/user/create.php
+	-create POST http://92.87.91.16/backend_code/api/user/create.php
 		To send:
 			{
 				"vendor_id": "2"
@@ -64,7 +64,7 @@ Others return simple JSON { ... }
 		**To solve for 500 duplicate PK (send diffrent response)
 <<
 >>
-	-update PUT http://192.168.206.128/AmbrosiaAlert-Server/api/user/update.php
+	-update PUT http://92.87.91.16/backend_code/api/user/update.php
 	To send:
 				{
 
@@ -84,7 +84,7 @@ Others return simple JSON { ... }
 <<
 >>
 
-	-delete DELETE http://192.168.206.128/AmbrosiaAlert-Server/api/user/delete.php
+	-delete DELETE http://92.87.91.16/backend_code/api/user/delete.php
 		To send:
 				{
 					"vendor_id": "3"
@@ -106,7 +106,7 @@ Others return simple JSON { ... }
 <<
 
 2. Volunteers:
-	-read GET http://192.168.206.128/AmbrosiaAlert-Server/api/volunteer/read.php
+	-read GET http://92.87.91.16/backend_code/api/volunteer/read.php
 		Response 1:
 		200OK 
 			{
@@ -134,7 +134,7 @@ Others return simple JSON { ... }
 	-read_single GET 404 not found (not implemented)
 >>
 <<	
-	-create POST http://192.168.206.128/AmbrosiaAlert-Server/api/volunteer/create.php
+	-create POST http://92.87.91.16/backend_code/api/volunteer/create.php
 	To send:
 			{
 				"email": "test-val5@mail.com",
@@ -170,7 +170,7 @@ Others return simple JSON { ... }
 >>
 <<
 
-	-delete DELETE http://192.168.206.128/AmbrosiaAlert-Server/api/volunteer/delete.php
+	-delete DELETE http://92.87.91.16/backend_code/api/volunteer/delete.php
 	To send:
 			{
 				"email": "test-val5@mail.com"
@@ -201,7 +201,7 @@ Others return simple JSON { ... }
 >>
 <<
 
-	-login POST http://192.168.206.128/AmbrosiaAlert-Server/api/volunteer/login.php
+	-login POST http://92.87.91.16/backend_code/api/volunteer/login.php
 	To send
 			{
 				"email": "test-val@test.com",
@@ -231,7 +231,7 @@ Others return simple JSON { ... }
 <<
 
 3. New volunteers
-	-read GET http://192.168.206.128/AmbrosiaAlert-Server/api/new_volunteer/read.php
+	-read GET http://92.87.91.16/backend_code/api/new_volunteer/read.php
 
 	Response 1:
 	200OK
@@ -265,7 +265,7 @@ Others return simple JSON { ... }
 >>
 <<
 
-	-create POST http://192.168.206.128/AmbrosiaAlert-Server/api/new_volunteer/create.php
+	-create POST http://92.87.91.16/backend_code/api/new_volunteer/create.php
 	To send:
 			{
 				"email": "test-val@mail.com",
@@ -302,7 +302,7 @@ Others return simple JSON { ... }
 >>
 <<
 
-	-delete DELETE http://192.168.206.128/AmbrosiaAlert-Server/api/new_volunteer/delete.php
+	-delete DELETE http://92.87.91.16/backend_code/api/new_volunteer/delete.php
 		To send:
 			{
 				"email": "test-val@mail.com"
@@ -333,7 +333,7 @@ Others return simple JSON { ... }
 >>
 <<
 
-	-login POST http://192.168.206.128/AmbrosiaAlert-Server/api/new_volunteer/login.php
+	-login POST http://92.87.91.16/backend_code/api/new_volunteer/login.php
 		To send:
 			{
 				"email": "test-val2@test.com",
@@ -363,7 +363,7 @@ Others return simple JSON { ... }
 
 4. Admins
 
-	-read GET http://192.168.206.128/AmbrosiaAlert-Server/api/admins/read.php
+	-read GET http://92.87.91.16/backend_code/api/admins/read.php
 
 		Response 1:
 		200OK
@@ -389,7 +389,7 @@ Others return simple JSON { ... }
 >>
 <<
 
-	-create POST http://192.168.206.128/AmbrosiaAlert-Server/api/admins/create.php
+	-create POST http://92.87.91.16/backend_code/api/admins/create.php
 		To send:
 		{
 			"name": "admin_test",
@@ -413,7 +413,7 @@ Others return simple JSON { ... }
 >>
 <<
 
-	-login POST http://192.168.206.128/AmbrosiaAlert-Server/api/admins/login.php
+	-login POST http://92.87.91.16/backend_code/api/admins/login.php
 	To send:
 		{
 			"name": "admin_test",
@@ -439,7 +439,7 @@ Others return simple JSON { ... }
 <<
 5. Blue markers:
 
-	-read GET http://192.168.206.128/AmbrosiaAlert-Server/api/blue_marker/read.php
+	-read GET http://92.87.91.16/backend_code/api/blue_marker/read.php
 
 		Response 1:
 		200OK
@@ -466,7 +466,7 @@ Others return simple JSON { ... }
 >>
 <<		
 
-	-read_single GET http://192.168.206.128/AmbrosiaAlert-Server/api/blue_marker/read_single.php?longitude=10.123&latitude=10.123
+	-read_single GET http://92.87.91.16/backend_code/api/blue_marker/read_single.php?longitude=10.123&latitude=10.123
 		Response 1:
 		200OK
 			{
@@ -488,7 +488,7 @@ Others return simple JSON { ... }
 >>
 <<
 
-	-create POST http://192.168.206.128/AmbrosiaAlert-Server/api/blue_marker/create.php
+	-create POST http://92.87.91.16/backend_code/api/blue_marker/create.php
 		To send:
 		{
 			"longitude": "1.123",
@@ -519,12 +519,12 @@ Others return simple JSON { ... }
 
 >>
 <<
-	-update PUT  http://192.168.206.128/AmbrosiaAlert-Server/api/blue_marker/update.php
+	-update PUT  http://92.87.91.16/backend_code/api/blue_marker/update.php
 			** 405 Method not Allowed
 >>
 <<
 
-	-delete DELETE http://192.168.206.128/AmbrosiaAlert-Server/api/blue_marker/delete.php
+	-delete DELETE http://92.87.91.16/backend_code/api/blue_marker/delete.php
 	To send:
 
 			{
@@ -553,30 +553,41 @@ Others return simple JSON { ... }
 6. Yellow markers
 
 
-	-read GET http://192.168.206.128/AmbrosiaAlert-Server/api/yellow_marker/read.php
-
+	-read GET http://92.87.91.16/backend_code/api/yellow_marker/read.php
 	Response 1:
 	200OK
-
-
-	-------------------------------------------------------------------------------------
-	Response 2:
-	404Not Found
 	{
-		"message": "No Yellow Markers Found"
-	}
-	-------------------------------------------------------------------------------------
-	Response 3: 
-	500Server Error
+		"data": [
+			{
+				"latitude": "1.1234000000",
+				"longitude": "1.1234000000",
+				"email_volunteer": "test-val2@test.com",
+				"time": "2021-03-13-11-39-21"
+			},
+			......................................................
+		-----------------------------------------------------------------------
+		Response 2:
+		404Not Found
+		{
+			'message': 'No Yellow Markers Found'
+		}
+		-----------------------------------------------------------------------
+		Response 3:
+		500Server Error
 
 >>
 <<
 
-	-read_single GET http://192.168.206.128/AmbrosiaAlert-Server/api/yellow_marker/read_single.php?latitude=44.8200492859&longitude=25.0764064789
+	-read_single GET http://92.87.91.16/backend_code/api/yellow_marker/read_single.php?latitude=44.8200492859&longitude=25.0764064789
 
 	Response 1:
 	200OK
-
+		{
+			"latitude": "10.1234000000",
+			"longitude": "10.1234000000",
+			"email_volunteer": null,
+			"time": "2021-03-11-11-51-23"
+		}
 	--------------------------------------------------------------------------------------
 	Response 2:
 	404Not Found
@@ -590,12 +601,20 @@ Others return simple JSON { ... }
 >>
 <<
 
-	-read_area GET http://192.168.206.128/AmbrosiaAlert-Server/api/yellow_marker/read_area.php?latitude=1.123&longitude=1.123
+	-read_area GET http://92.87.91.16/backend_code/api/yellow_marker/read_area.php?latitude=1.123&longitude=1.123
 		*aprox. 31 sq. km. from given location
 
 		Response 1:
 		200OK
-
+		{
+			"data": [
+				{
+					"latitude": "1.1234000000",
+					"longitude": "1.1234000000",
+					"email_volunteer": "test-val2@test.com",
+					"time": "2021-03-13-11-39-21"
+				},
+				.....................................................
 		------------------------------------------------------------------------------------
 		Response 2:
 		404Not Found
@@ -609,7 +628,7 @@ Others return simple JSON { ... }
 >>
 <<
 
-	-create POST http://192.168.206.128/AmbrosiaAlert-Server/api/yellow_marker/create.php
+	-create POST http://92.87.91.16/backend_code/api/yellow_marker/create.php
 	To send:
 			{
 				"longitude": "10.1234",
@@ -642,7 +661,7 @@ Others return simple JSON { ... }
 >>
 <<
 
-	-confirm POST http://192.168.206.128/AmbrosiaAlert-Server/api/yellow_marker/confirm.php
+	-confirm POST http://92.87.91.16/backend_code/api/yellow_marker/confirm.php
 	To send:
 		{
 			"longitude": "10.1234",
@@ -655,7 +674,9 @@ Others return simple JSON { ... }
 	______________
 	Response 1:
 	200OK
-
+	{
+		"message": "Action performed!"
+	}
 	----------------------------------------------------------------------------------------
 	Response 2:
 	403Forbidden
@@ -675,7 +696,7 @@ Others return simple JSON { ... }
 >>
 <<
 
-	-delete DELETE http://192.168.206.128/AmbrosiaAlert-Server/api/yellow_marker/delete.php
+	-delete DELETE http://92.87.91.16/backend_code/api/yellow_marker/delete.php
 	To send:
 			{
 				"longitude": "1.1234",
@@ -702,8 +723,10 @@ Others return simple JSON { ... }
 
 7. Red markers:
 
-	-read GET http://192.168.206.128/AmbrosiaAlert-Server/api/red_marker/read.php
+	-read GET http://92.87.91.16/backend_code/api/red_marker/read.php
 
+		Response 1:
+		200OK
 		{
 		"data": [
 			{
@@ -714,16 +737,24 @@ Others return simple JSON { ... }
 				"likes": "24",
 				"dislikes": null,
 				"radius": null
-			}
+			},
+			.........................................................
 		]
 	}
+	-------------------------------------------------------------------------------------------
+	Response 2:
+	404Not Found
+	{
+		'message': 'No Red Markers Found'
+	}
+
 >>
 <<
 
-	-read_single GET http://192.168.206.128/AmbrosiaAlert-Server/api/red_marker/read_single.php?latitude=25.0751705170&longitude=44.8232307434
-			SOLVED*200 ok, not working!!
-			SOLVED** when the marker dose not exist it returnns 200 OK with FALSE POSITIVE
+	-read_single GET http://92.87.91.16/backend_code/api/red_marker/read_single.php?latitude=25.0751705170&longitude=44.8232307434
 
+		Response 1:
+		200OK
 			{
 				"latitude": "0.0000000000",
 				"longitude": "0.0000000000",
@@ -732,42 +763,54 @@ Others return simple JSON { ... }
 				"likes": "24",
 				"dislikes": null
 			}
-
-
+		----------------------------------------------------------------------------------------------------------
+		Response 2:
+		404Not Found
 			{
     			"message": "red_marker dose NOT exist"
 			}
+
+		-----------------------------------------------------------------------------------------------------------
+		Response 3:
+		500Server Error
+
 >>
 <<
 
-	-read_area GET http://192.168.206.128/AmbrosiaAlert-Server/api/red_marker/read_area.php?latitude=1.123&longitude=1.123
+	-read_area GET http://92.87.91.16/backend_code/api/red_marker/read_area.php?latitude=1.123&longitude=1.123
 			*aprox. 31 sq. km. from given location
 
-
+	Response 1:
+		200OK
+		{
+			"data": [
+				{
+					"latitude": "0.0000000000",
+					"longitude": "0.0000000000",
+					"email_volunteer": null,
+					"time": null,
+					"likes": "24",
+					"dislikes": null,
+					"radius": null
+				},
+				..............................................................................
+			]
+		}
+	-------------------------------------------------------------------------------------------------------------------------
+	Response 2:
+		404Not Found
 			{
-    "data": [
-        {
-            "latitude": "0.0000000000",
-            "longitude": "0.0000000000",
-            "email_volunteer": null,
-            "time": null,
-            "likes": "24",
-            "dislikes": null,
-            "radius": null
-        }
-    ]
-}
+    			"message": "No Red Markers Found"
+			}
+	-----------------------------------------------------------------------------------------------------------
+	Response 3:
+		500Server Error
 
-
-
-{
-    "message": "No Red Markers Found"
-}
 
 >>
 <<
 
-	-create POST http://192.168.206.128/AmbrosiaAlert-Server/api/red_marker/create.php
+	-create POST http://92.87.91.16/backend_code/api/red_marker/create.php
 	To send:
 			{
 				"longitude": "1.0",
@@ -776,86 +819,151 @@ Others return simple JSON { ... }
 			}
 			*if this marker is in area of another marker it won't be added, but the no. of likes for that other marker will +1
 			*if email dose not exist 500 Internal Server Error (nothing is added)
-			
+			______________
+			Response 1:
+			200OK
 			{
     			"message": "red marker created!"
 			}
-
+			---------------------------------------------------------------------------------------------------------------------
+			Response 2:
+			200OK
 			{
     			"message": "red marker NOT created! In area of other marker (incremented)"
 			}
-
-
-
-
+			---------------------------------------------------------------------------------------------------------------------
+			Response 3:
+			503Service Unavailable
+			{
+				'message': 'ERROR occurred. Red marker in area of other marker; NO increment'
+			}
+			---------------------------------------------------------------------------------------------------------------------
+			Response 4:
+			503Service Unavailable
+			{
+				'message': 'ERROR occurred. Red marker NOT created'
+			}
+			---------------------------------------------------------------------------------------------------------------------
+			Response 5:
+			500Server Error
 
 >>
 <<
-	-delete DELETE http://192.168.206.128/AmbrosiaAlert-Server/api/red_marker/delete.php
+
+	-delete DELETE http://92.87.91.16/backend_code/api/red_marker/delete.php
+		To send:
 			{
 				"longitude": "36.1234502792",
 				"latitude": "36.1234502792"
 			}
-
-
-			{
-    			"message": "Red marker deleted"
-			}
+		______________
+		Response 1:
+		200OK
+		{
+    		"message": "Red marker deleted"
+		}
+		-------------------------------------------------------------------------------------------------------------------------
+		Response 2: 
+		500Server Error
 
 >>
 <<
 
-	-update PUT  http://192.168.206.128/AmbrosiaAlert-Server/api/red_marker/update.php
+	-update PUT  http://92.87.91.16/backend_code/api/red_marker/update.php
 	** 405 Method not Allowed
 
+
+>>
+<<
 
 
 8. Grey markers
 
-	-read GET http://192.168.206.128/AmbrosiaAlert-Server/api/grey_marker/read.php
-
-
-200OK
-...
-
-404Not Found
+	-read GET http://92.87.91.16/backend_code/api/grey_marker/read.php
+	Response 1:
+	200OK
 	{
-    	"message": "No grey Markers Found"
+		"data": [
+			{
+				"latitude": "10.1234500000",
+				"longitude": "10.1234500000",
+				"email_volunteer": "test@mail.com",
+				"time_of_delete": "2021-03-11-12-57-23"
+			},
+			........................................................................
+		]
 	}
+	---------------------------------------------------------------------------------------
+	Response 2:
+	404Not Found
+		{
+			"message": "No grey Markers Found"
+		}
+	---------------------------------------------------------------------------------------
+	Response 3:
+	500Server Error
+
 >>
 <<
 
-	-read_single GET http://192.168.206.128/AmbrosiaAlert-Server/api/grey_marker/read_single.php?latitude=44.8200492859&longitude=25.0764064789
+	-read_single GET http://92.87.91.16/backend_code/api/grey_marker/read_single.php?latitude=10.12345&longitude=10.12345
 
+		Response 1:
+		200OK
+		{
+			"latitude": 10.12345,
+			"longitude": 10.12345,
+			"email_volunteer": null,
+			"time_of_delete": "2021-03-11-12-57-23"
+		}
+	---------------------------------------------------------------------------------------
+	*If marker does not exist, the non-existing marker is returned (to be solved...)
 
 >>
 <<
-	-create POST http://192.168.206.128/AmbrosiaAlert-Server/api/grey_marker/create.php
+
+	-create POST http://92.87.91.16/backend_code/api/grey_marker/create.php
+		To send:
 			{
 				"longitude": "10.1234",
 				"latitude": "10.1234",
 				"email_volunteer": "test@mail.com"
 			}
-
-
-res
+			______________
+			Response 1:
+			200OK
 			{
     			"message": "grey marker created"
 			}
+			---------------------------------------------------------------------------------------
+			Response 2:
+			503Service Unavailable
+			{
+				'message': 'ERROR occurred. grey marker NOT created'
+			}
+			---------------------------------------------------------------------------------------
+			Response 3:
+			500Server Error
 			
 >>
 <<
 
-	-delete DELETE http://192.168.206.128/AmbrosiaAlert-Server/api/grey_marker/delete.php
-			{
-				"longitude": "10.1234",
-				"latitude": "10.1234"
-			}
-
-
-			{
-    			"message": "grey marker deleted"
-			}
+	-delete DELETE http://92.87.91.16/backend_code/api/grey_marker/delete.php
+	To send:
+		{
+			"longitude": "10.1234",
+			"latitude": "10.1234"
+		}
+		______________
+		Response 1:
+		200OK
+		{
+			"message": "grey marker deleted"
+		}
+		---------------------------------------------------------------------------------------
+		Response 2:
+		500Server Error
+		
 >>
 <<
 
@@ -867,7 +975,7 @@ res
 	-read GET 
 	-read_single GET
 
-	-create (user) POST http://192.168.206.128/AmbrosiaAlert-Server/api/feedback/user.php
+	-create (user) POST http://92.87.91.16/backend_code/api/feedback/user.php
 	To send:
 			{
 				"vendor_id": "2",
@@ -904,7 +1012,7 @@ res
 		-------------------------------------------------------------------
 <<
 >>
-	-create (volunteer) POST http://192.168.206.128/AmbrosiaAlert-Server/api/feedback/volunteer.php
+	-create (volunteer) POST http://92.87.91.16/backend_code/api/feedback/volunteer.php
 	To send:
 			{
 				"email": "test-val@test.com",
@@ -941,7 +1049,7 @@ res
 		-------------------------------------------------------------------
 <<
 >>
--create (new_volunteer) POST http://192.168.206.128/AmbrosiaAlert-Server/api/feedback/new_volunteer.php
+-create (new_volunteer) POST http://92.87.91.16/backend_code/api/feedback/new_volunteer.php
 	To send:
 			{
 				"email": "test-val@test.com",
