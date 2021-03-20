@@ -107,7 +107,7 @@ class Red_marker {
       if(distance($this->latitude, $this->longitude, $marker['latitude'], $marker['longitude']) < $marker['radius']+40){//intersect more than 10 meters
         try{
           //increment the confirmations of that marker
-            $this->_increment_confrimations($marker['likes']+1,$marker['latitude']);
+            $this->_increment_confrimations($marker['likes']+5,$marker['latitude']);
             return 0;
         } catch(Exception $e){
             return 1;

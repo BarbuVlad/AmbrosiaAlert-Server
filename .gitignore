@@ -3,3 +3,4 @@
 /python_tests/.vs/*
 /python_tests/__pycache__/*
 /api/admins/l.php
+/reviews/*.html
