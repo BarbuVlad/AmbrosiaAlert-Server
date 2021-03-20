@@ -33,7 +33,7 @@ if ($handle = opendir('.')) {
 
         if ($entry != "." && $entry != "..") {
 
-            echo "<li>" . "<a href= \"http://192.168.206.128/AmbrosiaAlert-Server/reviews/$entry\">". "$entry" . "</li>";
+            echo "<li>" . "<a href= \"http://92.87.91.16/backend_code/reviews/$entry\">". "$entry" . "</li>";
         }
     }
 
