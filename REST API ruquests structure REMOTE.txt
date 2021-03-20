@@ -696,6 +696,40 @@ Others return simple JSON { ... }
 >>
 <<
 
+	-infirm POST http://92.87.91.16/backend_code/api/yellow_marker/infirm.php
+	To send:
+		{
+			"longitude": "10.1234",
+			"latitude": "10.1234",
+			"email_volunteer": "test-val2@test.com",
+			"email_volunteer_confirm": "test-val@test.com"
+		}
+	*email_volunteer ->email new_volunteer ce a pus acel marker yellow
+	*email_volunteer_confirm -> email volunteer ce a infirmat acel marker yellow
+	______________
+	Response 1:
+	200OK
+	{
+		"message": "Action performed!"
+	}
+	----------------------------------------------------------------------------------------
+	Response 2:
+	403Forbidden
+	{
+		'message' => 'ERROR_occurred. Volunteer no longer has rights'
+	}
+	----------------------------------------------------------------------------------------
+	Response 3:
+	503Service Unavailable
+	{
+    	"message": "ERROR occurred. Action cancelled !"
+	}		
+	----------------------------------------------------------------------------------------
+	Response 4:
+	500Server ERROR
+
+>>
+<<
 	-delete DELETE http://92.87.91.16/backend_code/api/yellow_marker/delete.php
 	To send:
 			{
@@ -1091,3 +1125,65 @@ Others return simple JSON { ... }
 
 	-delete
 	-update
+
+
+>>
+<<
+
+10. User Review
+
+	- send_review (anyone) POST  http://92.87.91.16/backend_code/api/user_review/send_review.php
+
+		To send:
+
+		{
+			"name": "User_name",
+			"title": "Some_title",
+			"body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ullamcorper libero vitae..."
+		}
+		* name and title are optional
+		**body can't be longer that 10000 characters
+		______________
+
+		Response 1:
+		400Bad request
+		{
+    		"ERROR": "Bad http verb"
+		}
+		* must be POST
+		----------------------------------------------------------------------------------------------------------------
+		Response 2:
+		413Payload Too Large
+		{
+    		"ERROR": "Payload Too Large"
+		}
+		* body must be under 10000 characters
+		----------------------------------------------------------------------------------------------------------------
+		Response 3:
+		428Precondition Required
+		{
+    		"ERROR": "JSON data has no body."
+		}
+		----------------------------------------------------------------------------------------------------------------
+		Response 4:
+		102Porcessing
+		200OK
+		{
+			"info": "processing..."
+		}{
+			"message": "Review sent successfully!"
+		}
+		*102 processing means that request is done correctly, the server will save files on disk and give 200OK
+		----------------------------------------------------------------------------------------------------------------
+		Response 5:
+		102Porcessing
+		503Service Unavailable
+		{
+			"info": "processing..."
+		}{
+			"message": "ERROR occurred. Request failed at storing data."
+		}
+		*102 processing means that request is done correctly, the server will fail at saving files on disk and give code 503
+		----------------------------------------------------------------------------------------------------------------
+		Response 6:
+		500Server Error
