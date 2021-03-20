@@ -62,7 +62,7 @@ if((int)$_SERVER['CONTENT_LENGTH']>10000){
   ";
 
   $filename = date("Y-m-d");
-  $path_to_file = "/var/www/html/AmbrosiaAlert-Server/reviews/".$filename.".html";
+  $path_to_file = "/var/www/html/backend_code/reviews/".$filename.".html";
   //write data to disk
 
   try{
