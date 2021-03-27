@@ -85,7 +85,10 @@ class New_volunteer {
 
   public function _read_all_data() {
     //Create query
-    $query = 'SELECT email, phone, first_name, last_name, address, blocked, confirmations, password FROM ' . $this->table_name . ';';
+    $query = 'SELECT email, phone, first_name, last_name, address, blocked, confirmations, password FROM '
+     . $this->table_name
+     . " WHERE email=" . "'". $this->email . "'"
+     . ' LIMIT 0, 1;';
 
     //Prepare statement
     $stmt = $this->conn->prepare($query);
@@ -93,7 +96,17 @@ class New_volunteer {
     //Execute query
     $stmt->execute();
 
-    return $stmt;
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    //Set proprierties (public attributes)
+    $this->email = $row['email'];
+    $this->phone = $row['phone'];
+    $this->first_name = $row['first_name'];
+    $this->last_name = $row['last_name'];
+    $this->address = $row['address'];
+    $this->blocked = $row['blocked'];
+    $this->confirmations = $row['confirmations'];
+    $this->password = $row['password'];
   }
 
   //Creaza o noua intrare in tabel - Create new entry in table

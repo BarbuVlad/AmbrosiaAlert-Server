@@ -361,6 +361,49 @@ Others return simple JSON { ... }
 >>
 <<
 
+	-validate POST http://92.87.91.16/backend_cod/api/new_volunteer/validate.php
+		To send:
+			{
+				"email_volunteer": "test_mail",
+				"markers_action": "delete"
+			}
+			* markers_action(optional) can be either - delete -> deletes all yellow_markers created by this volunteer
+										             - confirm(default) -> confirms all yellow_markers into red_markers
+			** In the future only an admin can do this action (work in progress)
+			______________
+			Response 1:
+			200OK
+			{
+    			"message": "New_volunteer validated successfully!All yellow markers of new_volunteer have been confirmed(default)!"
+			}
+
+			OR
+
+			{
+				"message": "New_volunteer validated successfully!All yellow markers of new_volunteer have been deleted!"
+			}
+
+			OR
+
+			{
+    			"message": "New_volunteer validated successfully!New_volunteer had no yellow_markers"
+			}
+
+			*If new_volunteer does not exist 200OK is returned but no changes made in DB 
+			-----------------------------------------------------------------------------
+			Response 2: 
+			503Service Unavailable
+			{
+				'message': 'ERROR occurred. Action cancelled !'
+			}
+			-----------------------------------------------------------------------------
+			Response 2: 
+			500Service Unavailable
+
+
+>>
+<<
+
 4. Admins
 
 	-read GET http://92.87.91.16/backend_code/api/admins/read.php

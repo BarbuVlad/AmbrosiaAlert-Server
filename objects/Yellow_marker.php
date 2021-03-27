@@ -97,6 +97,20 @@ class Yellow_marker {
     return $stmt;
   }
 
+  public function read_of_volunteer() {
+
+    $query = 'SELECT latitude, longitude, email_volunteer, time FROM ' . $this->table_name .
+    ' WHERE email_volunteer=:email_volunteer';
+    //Prepare statement
+    $stmt = $this->conn->prepare($query);
+    //Bind
+    $stmt->bindParam(":email_volunteer", $this->email_volunteer);
+
+    $stmt->execute();
+
+    return $stmt;
+  }
+
   //Creaza o noua intrare in tabel - Create new entry in table
   public function create() {
     //Creaza query - Create query
